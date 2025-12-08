@@ -8,11 +8,11 @@ While phylogenetic and phylodynamic trees both depict evolutionary relationships
 
 We can apply the [augur](https://docs.nextstrain.org/projects/augur/en/stable/) pipeline on [Nextstrain](https://docs.nextstrain.org/en/latest/index.html) to generate these timetrees. Augur is composed of a series of modules and different workflows which use different parts of the pipeline. A selection of the different input and output files are illustrated below.
 
-![Augur workflow](augur.jpg)
+![Augur workflow - taken from https://docs.nextstrain.org/projects/augur/en/stable/ ](augur.jpg)
 
 Nextstrain maintains analyses of several selected [pathogens](https://nextstrain.org/pathogens#list), such as SARS-CoV-2 and influenza to show pathogen evolution and epidemic spread. Nextstrain continually update sequencing data for selected pathogens as new data is made publicly available. Automated pipelines are available for the following viral targets:
 
-![Viral targets with automated pipelines](Nextstrain_pathogens.jpg)
+![Viral targets with automated pipelines - taken from https://nextstrain.org/pathogens#list](Nextstrain_pathogens.jpg)
 
 ## Nextstrain - pre-set automated pipeline
 
@@ -29,7 +29,6 @@ mkdir Nextstrain_builds
 
 You also need to be in the right environment:
 
-
 ``` bash
 conda deactivate nanopore_diagnostics
 ```
@@ -40,7 +39,7 @@ conda activate nextstrain2025
 
 ### Download the references
 
-You first need to go to the Nextstrain github page for your virus of interest. We will use [mpox](https://github.com/nextstrain/mpox/tree/master?tab=readme-ov-file)as an example. 
+You first need to go to the Nextstrain github page for your virus of interest. We will use [mpox](https://github.com/nextstrain/mpox/tree/master?tab=readme-ov-file)as an example.
 
 ![Example](github.jpg) Click **Code** and then **Download ZIP**. This zip contains all your scripts you need for the pipeline.
 
