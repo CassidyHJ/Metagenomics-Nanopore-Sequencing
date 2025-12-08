@@ -1,0 +1,416 @@
+[
+  {
+    "objectID": "Visualization.html",
+    "href": "Visualization.html",
+    "title": "Visualization",
+    "section": "",
+    "text": "KronaTools can be used to generate Krona plots which represent hierarchical data in multi-layered pie charts.\nMake sure you are in the right folder.\ncd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Viro_Run_0001/barcode01/kraken2_standard/ \n\n\n\n\n\n\nWarning\n\n\n\nRemember to update the run paths and barcodes for each sample!\n\n\nCopy the command below:\nktImportTaxonomy -t 5 -m 3 -o report.html report_standard.txt\n🔹-t 5 – Sets the total number of taxonomic levels (or depth) to display.\n🔹-m 3 – Minimum number of reads required for a taxon to appear in the output to reduce clutter.\n🔹-o krona_report.html – Output file name for the interactive HTML Krona chart.\n🔹report.txt – Input file containing taxonomic classification data (e.g., from Kraken2’s output).\n\n\n\n\n\n\nTip\n\n\n\nIf there are any false positive hits you want to exclude from the Krona plot, you must manually remove them from the report_standard.txt file before running the Krona command. If its inconclusive, you can keep the potential false positive result in the krona plot, but remember to state that a false positive finding is likely in the clinical report.\n\n\n\n\n\nIllustration example\n\n\nPlease click here for an example of the interactive HTML krona output. Select only for viruses. If you want to copy the image, right hand click and copy. This image can then be pasted (with some adjustments) on the clinical reports.\n\n\nAfter viewing the krona plot, you may want to remove some false positive findings.\nYou can do this by going into the Kraken2_standard folder and opening up the report_standard.txt file. There you can set the number of reads back to zero for the false positive finding - remember in addition to setting the number of reads, you must also set the normalized percentage. Save with the same name.\n\n\n\n\n\n\nWarning\n\n\n\nRemember to be in the correct folder\n\n\ncd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Viro_Run_0001/barcode01/Kraken2_standard/\nRemove the original krona plot\nrm report.html\nThen just re-run the command:\nktImportTaxonomy -t 5 -m 3 -o report.html report_standard.txt\nIn order to open your krona plot (and other files) within windows, you need to have permission. Paste the following into the terminal:\nchmod 777 -R /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Viro_Run_0001/\nThis will take some time!",
+    "crumbs": [
+      "Classification",
+      "Visualization"
+    ]
+  },
+  {
+    "objectID": "Visualization.html#generating-krona-plots",
+    "href": "Visualization.html#generating-krona-plots",
+    "title": "Visualization",
+    "section": "",
+    "text": "KronaTools can be used to generate Krona plots which represent hierarchical data in multi-layered pie charts.\nMake sure you are in the right folder.\ncd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Viro_Run_0001/barcode01/kraken2_standard/ \n\n\n\n\n\n\nWarning\n\n\n\nRemember to update the run paths and barcodes for each sample!\n\n\nCopy the command below:\nktImportTaxonomy -t 5 -m 3 -o report.html report_standard.txt\n🔹-t 5 – Sets the total number of taxonomic levels (or depth) to display.\n🔹-m 3 – Minimum number of reads required for a taxon to appear in the output to reduce clutter.\n🔹-o krona_report.html – Output file name for the interactive HTML Krona chart.\n🔹report.txt – Input file containing taxonomic classification data (e.g., from Kraken2’s output).\n\n\n\n\n\n\nTip\n\n\n\nIf there are any false positive hits you want to exclude from the Krona plot, you must manually remove them from the report_standard.txt file before running the Krona command. If its inconclusive, you can keep the potential false positive result in the krona plot, but remember to state that a false positive finding is likely in the clinical report.\n\n\n\n\n\nIllustration example\n\n\nPlease click here for an example of the interactive HTML krona output. Select only for viruses. If you want to copy the image, right hand click and copy. This image can then be pasted (with some adjustments) on the clinical reports.\n\n\nAfter viewing the krona plot, you may want to remove some false positive findings.\nYou can do this by going into the Kraken2_standard folder and opening up the report_standard.txt file. There you can set the number of reads back to zero for the false positive finding - remember in addition to setting the number of reads, you must also set the normalized percentage. Save with the same name.\n\n\n\n\n\n\nWarning\n\n\n\nRemember to be in the correct folder\n\n\ncd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Viro_Run_0001/barcode01/Kraken2_standard/\nRemove the original krona plot\nrm report.html\nThen just re-run the command:\nktImportTaxonomy -t 5 -m 3 -o report.html report_standard.txt\nIn order to open your krona plot (and other files) within windows, you need to have permission. Paste the following into the terminal:\nchmod 777 -R /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Viro_Run_0001/\nThis will take some time!",
+    "crumbs": [
+      "Classification",
+      "Visualization"
+    ]
+  },
+  {
+    "objectID": "Removing_host_reads.html",
+    "href": "Removing_host_reads.html",
+    "title": "Removing Host Reads",
+    "section": "",
+    "text": "Our next step is to remove or filter out human reads to prepare for downstream analysis. We use MiniMap2, a fast and flexible alignment tool, to map reads against a human reference genome. This produces a BAM file, which contains all aligned sequences. The resulting BAM file can then be sorted using Samtools.\nTo remove human reads, we use reference genome: GCF_000001405.26_GRCh38_genomic.fna.gz. If other host organisms need to be filtered (e.g., horses, sheep, or cattle), you should first remove human reads as human contamination can be introduced during wet lab handling and then map against additional host references as needed.\nReference genomes for other species (eg., horses, sheep or cattle) are available under the path: /mnt/viro0002-data/workgroups_projects/Bioinformatics/DB/\nminimap2 -Y -t 32 -x map-ont -a /mnt/viro0002-data/workgroups_projects/Bioinformatics/DB/HG38/GCF_000001405.26_GRCh38_genomic.fna.gz all_reads_QC.fastq 2&gt; /dev/null | samtools view -bf 4 - | samtools sort - &gt; all_reads_nonhuman.bam\nsamtools fastq all_reads_nonhuman.bam &gt; all_reads_QC_hg19.fastq\n🔹-Y – Use soft clipping for supplementary alignments. This keeps partial alignments from being “hard clipped” — helps retain info from partially mapped reads.\n🔹-t 32 – Use 32 threads to speed up the alignment.\n🔹-x map-ont – Use preset parameters for Oxford Nanopore reads (optimized scoring and alignment behavior).\n🔹-a – Output SAM format (sequence alignment/map). Required for downstream tools like samtools.\n🔹GRCh38_genomic.fna.gz – Path to the human genome reference (can be gzipped). You’re aligning reads to this genome.\n🔹all_reads_QC.fastq – The input FASTQ file (your cleaned and quality-filtered reads).\n🔹/dev/null – Silences stderr output (errors, warnings, and logs) so the console isn’t cluttered.\n🔹-b – Output as BAM (compressed binary format for alignments).\n🔹-f 4 – Keep only unmapped reads (reads that did not align to the reference genome).\nTo reduce the volume of unnecessary files (and save space), please remove the resulting bam file created. We are not interested in this bam file as it represents all the aligned sequences for the human genome.\nrm all_reads_nonhuman.bam\n\n\n\n\n\n\nImportant\n\n\n\nYou now have your cleaned and trimmed reads “all_reads_QC_hg19.fastq”. We will be using these reads for all further analysis!\n\n\nNow we need to screen the sample, either through taxonomic classification or de novo assembly. While mapping refers to mapping reads to a reference, assembly focuses on the reconstruction of the original sequence by aligning and merging shorter reads.\n\n\n\nIllustration",
+    "crumbs": [
+      "Removing Host Reads"
+    ]
+  },
+  {
+    "objectID": "Preparation_and_Reference_Collection.html",
+    "href": "Preparation_and_Reference_Collection.html",
+    "title": "Preparation and Reference Collection",
+    "section": "",
+    "text": "Create an additional folder for all your tree analysis:\nMake sure you are in the right path",
+    "crumbs": [
+      "Phylodynamics",
+      "Preparation and Reference Collection"
+    ]
+  },
+  {
+    "objectID": "Preparation_and_Reference_Collection.html#collecting-your-reference-sequences",
+    "href": "Preparation_and_Reference_Collection.html#collecting-your-reference-sequences",
+    "title": "Preparation and Reference Collection",
+    "section": "1 Collecting your reference sequences",
+    "text": "1 Collecting your reference sequences\nUsing a curated database (eg BV-BRC, GISAID, Refseq) download your reference fasta files - please name the file “pathogen_sequences” and place in the “Tree” folder.\nTo open your fasta file, bioedit or Aliview can be used. Rename the references to remove any spaces or unsupported characters (use underscores instead). For consistency, it’s best to include the accession number, species name, genotype (if available), country of origin and sampling year. Metadata will be important for generating a time-resolved tree with Nextstrain (more on this later) or can be used in clinical reporting.\nOpen an excel sheet. This will be your metadata file. This should include the reference name in the first column referred to as “strain”, followed by any other available metadata you have for this reference. Save the metadata file as metadata.tsv and place it in the “Tree” folder.\nPlease refer to this link for more information on metadata set up. Be carful of the date format on excel!\nFor the purpose of this guide, we will use rhinovirus A as a study virus. Below you can see an example of the metadata layout.\n\n\n\nMetadata layout\n\n\n\n\n\n\n\n\nImportant\n\n\n\nNow add your selected consensus sequences of interest to the fasta file “pathogen_sequences”and metadata file.\n\n\n\n\n\n\n\n\nWarning\n\n\n\nThe strain name on the metadata.tsv should match exactly with the corresponding fasta file!",
+    "crumbs": [
+      "Phylodynamics",
+      "Preparation and Reference Collection"
+    ]
+  },
+  {
+    "objectID": "pipeline.html",
+    "href": "pipeline.html",
+    "title": "Pipeline Stages",
+    "section": "",
+    "text": "kraken2 --db kraken_db --report report.txt --output kraken_output.txt non_host.fastq\n\n\nktImportTaxonomy -o krona_report.html report.txt\n\n\n\nsnakemake --cores 4"
+  },
+  {
+    "objectID": "pipeline.html#visualization",
+    "href": "pipeline.html#visualization",
+    "title": "Pipeline Stages",
+    "section": "",
+    "text": "ktImportTaxonomy -o krona_report.html report.txt"
+  },
+  {
+    "objectID": "pipeline.html#metagenomics-automation",
+    "href": "pipeline.html#metagenomics-automation",
+    "title": "Pipeline Stages",
+    "section": "",
+    "text": "snakemake --cores 4"
+  },
+  {
+    "objectID": "pipeline.html#consensus-visualization",
+    "href": "pipeline.html#consensus-visualization",
+    "title": "Pipeline Stages",
+    "section": "2.1 Consensus Visualization",
+    "text": "2.1 Consensus Visualization\nVisual inspection using IGV or bam-readcount."
+  },
+  {
+    "objectID": "pipeline.html#phylodynamics",
+    "href": "pipeline.html#phylodynamics",
+    "title": "Pipeline Stages",
+    "section": "2.2 Phylodynamics",
+    "text": "2.2 Phylodynamics\nRun tree inference with tools like IQ-TREE or TreeTime, then visualize with Auspice or iTOL."
+  },
+  {
+    "objectID": "Old/index.html",
+    "href": "Old/index.html",
+    "title": "Metagenomics Nanopore Workflow",
+    "section": "",
+    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "inputs.html",
+    "href": "inputs.html",
+    "title": "Inputs & Preparation",
+    "section": "",
+    "text": "1 Preparation\nBefore running the pipeline, ensure all required software, databases, and input files are prepared.\n\nInput files:\n\nRaw Nanopore reads (FASTQ)\nSample metadata or mapping file (optional)\nExcel file with paths/configuration\n\n\n\n\n2 Load Excel Config (Python Example)\n\nimport pandas as pd\ndf = pd.read_excel(\"file_paths.xlsx\")  # make sure file_paths.xlsx exists\ndf.head()\n\n\n\n\n\n\n\n\nSample\nInput Directory\n\n\n\n\n0\nbarcode11\n/mnt/viro0002/sequencedata/processed/HCV/Meta/..."
+  },
+  {
+    "objectID": "Generating_Phylogenetic_Trees.html",
+    "href": "Generating_Phylogenetic_Trees.html",
+    "title": "Generating Phylogenetic Trees",
+    "section": "",
+    "text": "A phylogenetic tree or phylogeny shows the evolutionary history between a set of species or taxa during a specific time. It can be used to indicate similarities between sequences or help identify clusters or lineages.\nThere are several different tools to help you build trees.\nWe will first build a more simplified tree using MAFFT (for alignment) and IQ-TREE (estimates Maximum-Likelihood Phylogeny). We will then use Figtree for visualization.\nMake sure you have read through and completed any tasks in the Preparation and Reference collection chapter.\nNow make sure you are in the right path",
+    "crumbs": [
+      "Phylodynamics",
+      "Generating Phylogenetic Trees"
+    ]
+  },
+  {
+    "objectID": "Generating_Phylogenetic_Trees.html#sequence-alignment-using-mafft",
+    "href": "Generating_Phylogenetic_Trees.html#sequence-alignment-using-mafft",
+    "title": "Generating Phylogenetic Trees",
+    "section": "1 Sequence alignment using MAFFT",
+    "text": "1 Sequence alignment using MAFFT\nWe will continue with our RVA example. We first need to align all our sequences.\nmafft -s RVA_sequences.fasta &gt; sequences_aligned.fasta\n🔹-s RVA_sequences.fasta – Specifies the input sequences in FASTA format. This is your “pathogen_of_interest_sequences” (in this case, Rotavirus A sequences).\n\n\n\n\n\n\nWarning\n\n\n\nIts important to always check your new alignment file to see if there are any sequences causing problems (e.g adding extra gaps) and remove them. Then re-run the alignment again.\n\n\n\n\n\nExample 1 - In this case, you could remove the problematic sequence if its only present in one reference\n\n\n\n\n\nExample 2 - An example of a high-quality alignment (e.g., no gaps, high similarity, proper coverage)",
+    "crumbs": [
+      "Phylodynamics",
+      "Generating Phylogenetic Trees"
+    ]
+  },
+  {
+    "objectID": "Generating_Phylogenetic_Trees.html#generating-phylogenetic-trees-using-iq-tree",
+    "href": "Generating_Phylogenetic_Trees.html#generating-phylogenetic-trees-using-iq-tree",
+    "title": "Generating Phylogenetic Trees",
+    "section": "2 Generating phylogenetic trees using IQ-Tree",
+    "text": "2 Generating phylogenetic trees using IQ-Tree\nNow that you have your alignment, copy the command below:\niqtree -s sequences_aligned.fasta -bb 1000 -st DNA -nt 16 -alrt 1000 -pre treefileout\n🔹-s sequences_aligned.fasta – Specifies the input alignment file in FASTA format. This should contain multiple aligned sequences (in this case, Rotavirus A sequences).\n🔹-bb 1000 – Performs ultrafast bootstrap analysis with 1000 replicates to assess the support for each branch in the phylogenetic tree.\n🔹-st DNA – Indicates that the input sequences are DNA (nucleotide) sequences.\n🔹-nt 16 – Uses 16 CPU threads for computation, speeding up the tree-building process.\n🔹-alrt 1000 – Runs an approximate likelihood-ratio test (aLRT) with 1000 replicates to calculate additional support values for tree branches.\n🔹-pre treefileout – Defines the prefix for all output files, such as treefileout.treefile",
+    "crumbs": [
+      "Phylodynamics",
+      "Generating Phylogenetic Trees"
+    ]
+  },
+  {
+    "objectID": "Generating_Phylogenetic_Trees.html#visualization-using-figtree",
+    "href": "Generating_Phylogenetic_Trees.html#visualization-using-figtree",
+    "title": "Generating Phylogenetic Trees",
+    "section": "3 Visualization using Figtree",
+    "text": "3 Visualization using Figtree\nFigTree is a free and open sourced tree visualization tool. Although its not always suitable for large datasets and is primarily designed for rooted trees, its a quick tool to visualize your initial trees.\nStart up Figtree and select open (select your new tree - treefileout.contree)\n-root in the middle, align tip labels, tip shapes, branch labels (display by bootstrap)\nPlease see the figure below as an example:",
+    "crumbs": [
+      "Phylodynamics",
+      "Generating Phylogenetic Trees"
+    ]
+  },
+  {
+    "objectID": "Consensus_Visualization.html",
+    "href": "Consensus_Visualization.html",
+    "title": "Consensus Visualization",
+    "section": "",
+    "text": "weeSAM can be used for generating coverage plots and providing statistics based on the bam file.\nMake sure you are in the right path\ncd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Viro_Run_0001/barcode01/\n\n\n\n\n\n\nWarning\n\n\n\nRemember to update the run paths and barcodes for each sample!\n\n\nNow just copy the command below:\nweeSAM --bam all_reads.bam --html coverage_plot\n\n\n\nExample\n\n\nIn the newly created folder “coverage_plot_html_results”, click on “figures” then “all_reads_figures” until you find the html report.",
+    "crumbs": [
+      "Consensus Generation",
+      "Consensus Visualization"
+    ]
+  },
+  {
+    "objectID": "Consensus_Visualization.html#creating-coverage-plots",
+    "href": "Consensus_Visualization.html#creating-coverage-plots",
+    "title": "Consensus Visualization",
+    "section": "",
+    "text": "weeSAM can be used for generating coverage plots and providing statistics based on the bam file.\nMake sure you are in the right path\ncd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Viro_Run_0001/barcode01/\n\n\n\n\n\n\nWarning\n\n\n\nRemember to update the run paths and barcodes for each sample!\n\n\nNow just copy the command below:\nweeSAM --bam all_reads.bam --html coverage_plot\n\n\n\nExample\n\n\nIn the newly created folder “coverage_plot_html_results”, click on “figures” then “all_reads_figures” until you find the html report.",
+    "crumbs": [
+      "Consensus Generation",
+      "Consensus Visualization"
+    ]
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "Assembly.html",
+    "href": "Assembly.html",
+    "title": "Assembly Automation",
+    "section": "",
+    "text": "Assembly focuses on the reconstruction of the original sequence by aligning and merging shorter reads.\nMapping-based approaches are more frequently used for Nanopore sequencing data owing to the higher base-calling error rate, which renders long-read de novo assembly more challenging compared to Illumina sequencing. However, in cases of high target coverage, contigs can be successfully assembled by merging overlapping reads.\nDiamond and Canu are tools that can be used for contig generation. Using cleaned Nanopore reads as input, our automated pipeline first identifies and annotates viral reads with DIAMOND, followed by contig assembly with Canu and taxonomic classification using BLAST. The pipeline produces a meta.contig.fasta file and a top_hit_per_contig.tsv summary table as final outputs.\nPlease note that the DIAMOND database used in this workflow is curated for viruses associated with humans and is therefore less suitable for broad or unbiased virus discovery.",
+    "crumbs": [
+      "Assembly",
+      "Assembly Automation"
+    ]
+  },
+  {
+    "objectID": "Assembly.html#preparing-to-run-the-workflow",
+    "href": "Assembly.html#preparing-to-run-the-workflow",
+    "title": "Assembly Automation",
+    "section": "1 Preparing to run the workflow",
+    "text": "1 Preparing to run the workflow\nTo run the automated pipeline, you first need to fill out the excel sheet Assembly_paths.xlsx within the Assembly_automation folder as shown in the example below. Do not change the file name when saving! Here, you tell snakemake which folder your cleaned reads are in. \nYou need to be in the right environment:\nconda deactivate nanopore_diagnostics\nconda activate canu_v2.3\nMake sure you are in the right folder.\ncd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Metagenomics_automation/Assembly_automation/  \nThen just copy in the following command:\nsnakemake --cores 16 \n\n\n\n\n\n\nWarning\n\n\n\nThis analysis may take some time. Its best to run all the samples together and run overnight.\n\n\n\n\n\n\n\n\nWarning\n\n\n\nRemember to update the run paths and barcodes for each sample!",
+    "crumbs": [
+      "Assembly",
+      "Assembly Automation"
+    ]
+  },
+  {
+    "objectID": "Assembly.html#output-summaries",
+    "href": "Assembly.html#output-summaries",
+    "title": "Assembly Automation",
+    "section": "2 Output summaries",
+    "text": "2 Output summaries\nOnce the analysis is complete, open the newly created Assembly_results folder within the Metagenomics_automation directory. The two key output files you will need — top_hit_per_contig.tsv and meta.contig.fasta — are located in the canu subfolder.\nThis file contains your top blast hits for each of your generated contigs.  The contig names should match the best hits. You can also double check the sequences by blasting on NCBI. These are your generated contigs! \n\n\n\n\n\n\nTip\n\n\n\nIf there are no assembly files created, this could mean that no contigs could be generated.",
+    "crumbs": [
+      "Assembly",
+      "Assembly Automation"
+    ]
+  },
+  {
+    "objectID": "Generating_Consensus.html",
+    "href": "Generating_Consensus.html",
+    "title": "Generating a Consensus Sequence",
+    "section": "",
+    "text": "After confirming read identification (via taxonomic classification) or contig (via assembly), a consensus sequence can be generated using the closest matching reference available on NCBI.\nMake sure you are in the right environment (you only need to change environments if you have performed assembly in the previous step)",
+    "crumbs": [
+      "Consensus Generation",
+      "Generating a Consensus Sequence"
+    ]
+  },
+  {
+    "objectID": "Generating_Consensus.html#create-a-reference-folder",
+    "href": "Generating_Consensus.html#create-a-reference-folder",
+    "title": "Generating a Consensus Sequence",
+    "section": "1 Create a “Reference” folder",
+    "text": "1 Create a “Reference” folder\nThis will serve as a path for all your future references. This is really important as it means your path will always stay the same and you only need to change the reference name (i.e the fasta file name). First check if this folder has already been made, if not create a Reference folder.\ncd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/\nls",
+    "crumbs": [
+      "Consensus Generation",
+      "Generating a Consensus Sequence"
+    ]
+  },
+  {
+    "objectID": "Generating_Consensus.html#download-the-most-appropriate-reference-fasta-file",
+    "href": "Generating_Consensus.html#download-the-most-appropriate-reference-fasta-file",
+    "title": "Generating a Consensus Sequence",
+    "section": "2 Download the most appropriate reference fasta file",
+    "text": "2 Download the most appropriate reference fasta file\nYou can find this by blasting your longest read (Kraken2) or contig (assembly) on NCBI. Pay close attention to the reference size, coverage and percentage identity.\n\n\n\nExample\n\n\nRename the reference fasta to avoid any spaces or unsuitable characters. Its best to keep it short and to the point - accession number and target. For example, “HQ647172_Enterovirus_A71.fasta”",
+    "crumbs": [
+      "Consensus Generation",
+      "Generating a Consensus Sequence"
+    ]
+  },
+  {
+    "objectID": "Generating_Consensus.html#make-sure-you-are-in-the-right-path",
+    "href": "Generating_Consensus.html#make-sure-you-are-in-the-right-path",
+    "title": "Generating a Consensus Sequence",
+    "section": "3 Make sure you are in the right path",
+    "text": "3 Make sure you are in the right path\ncd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Viro_Run_0001/barcode01/",
+    "crumbs": [
+      "Consensus Generation",
+      "Generating a Consensus Sequence"
+    ]
+  },
+  {
+    "objectID": "Generating_Consensus.html#consensus-generation",
+    "href": "Generating_Consensus.html#consensus-generation",
+    "title": "Generating a Consensus Sequence",
+    "section": "4 Consensus generation",
+    "text": "4 Consensus generation\nThe script works by reading the mapping file position-by-position and counting the highest nucleotide at each position. If a deletion (compared to the original reference) has the highest count, this will be taken into consideration during consensus generation.\nThis step involves a few commands. Lets break it up!\n\n\n\n\n\n\nWarning\n\n\n\nRemember to update the reference path\n\n\n\n4.1 Read alignment and indexing\nMiniMap2 is used for mapping our selected reference to our trimmed reads.\nminimap2 -Y -t 32 -x map-ont -a /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Reference/HQ647172_Enterovirus_A71.fasta all_reads_QC_hg19.fastq 2&gt; /dev/null | samtools view -bF 4 - | samtools sort -@ 16 - &gt; all_reads.bam\nsamtools index all_reads.bam\n🔹-Y – Use soft clipping for supplementary alignments (preserves soft-clipped bases at the ends).\n🔹-t 32 – Use 32 threads for faster processing.\n🔹-b – Output BAM format.\n🔹-F 4 – Filter unmapped reads (i.e., include only mapped reads).\n🔹-@ 16 – Use 16 threads for sorting.\n\n\n4.2 Generating depth per position and calling varients\nsamtools mpileup -a -A -Q 0 -d 0 -f /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Reference/HQ647172_Enterovirus_A71.fasta all_reads.bam | cut -f 2,3,4 --output-delimiter=',' &gt; all_reads.depth\n/mnt/scratch2/other_scripts/NAW_helperscripts/bam2vcf.py -c 8 -d 1 -af 0.1 -r /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Reference/HQ647172_Enterovirus_A71.fasta -b all_reads.bam -o all_reads.vcf\n/mnt/scratch2/other_scripts/NAW_helperscripts/filtervcf.py -i all_reads.vcf -o all_reads_filtered.vcf\n🔹-a – Include all positions, even those with 0 coverage.\n🔹-A – Include anomalous read pairs (not excluded by default).\n🔹-Q – Minimum base quality threshold is 0 (include all reads).\n🔹-d – Disable maximum read depth limit (default is 8000).\n🔹-f – Reference genome.\n🔹-c – Minimum base quality (PHRED) score for a base to be considered.\n🔹-d – Minimum depth to call a variant.\n🔹-af – Minimum allele frequency (e.g., 0.1 = 10%).\n🔹-r – Reference genome.\n🔹-b – BAM file.\n🔹-o – Output VCF file.\n\n\n\n\n\n\nImportant\n\n\n\nDepth (-d) is currently set at 1. For initial analysis this is fine, however its a good idea to set at least 3 for better confidence. If you are looking specifically at SNPs or antiviral resistance, depending on the target, consider changing to “30” or “100”.\n\n\n\n\n4.3 Generating a consensus sequence\n/mnt/scratch2/other_scripts/NAW_helperscripts/vcf2consensus.py -v all_reads_filtered.vcf -d all_reads.depth -r /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Reference/HQ647172_Enterovirus_A71.fasta -o all_reads_consensus.fasta -dp 1 -n \"Consensus_1x\"\nsamtools fastq all_reads.bam &gt; all_reads_mapped_readcount.fastq\n🔹-v – Input VCF file.\n🔹-d – Depth file (from mpileup) used to decide whether to mask low coverage sites.\n🔹-r – Reference sequence.\n🔹-o – Output consensus FASTA file.\n🔹-dp – Minimum depth required to call a base; otherwise, likely masked as “N”.\n🔹-n – Name for the FASTA header.\n\n\n\n\n\n\nImportant\n\n\n\nDepth (-dp) is currently set at 1. For initial analysis this is fine, however its a good idea to set at least 3 for better confidence. If you are looking specifically at snps or antiviral resistance, depending on the target, consider changing to “30” or “100”. Remember to update the fasta name (-n).\n\n\n\n\n4.4 Read mapping statistics\nNext, we can generate read statistics using Fastp, a flexible tool for quality control and processing of FASTQ data. Fastp can be used to remove low-quality reads and short sequences. Pay close attention to the total number of reads (post-QC), the total number of nucleotides (post-QC), and the average read length. Record these values for each sample in the Excel results sheet.\nfastp -i all_reads_mapped_readcount.fastq -o all_reads_mapped_readcount_QC.fastq -j /dev/null -h all_reads_mapped_readcount_QC.html --disable_trim_poly_g --disable_adapter_trimming --qualified_quality_phred 8 --unqualified_percent_limit 50 --length_required 150 -w 16\n🔹-i all_reads_mapped.fastq – Input FASTQ file which has just been mapped.\n🔹-o all_reads_mapped_readcount_QC.fastq – Output FASTQ file; this will be your filtered mapped reads.\n🔹-j /dev/null – Disables the JSON report as it’s not required.\n🔹-h all_reads_QC.html – Produces a visual quality report used for read statistics.\n🔹–disable_trim_poly_g – Disables this trimming feature (more relevant to Illumina reads).\n🔹–disable_adapter_trimming – Disables adapter trimming (assumes it’s already handled or unnecessary).\n🔹–qualified_quality_phred 8 – A base is “qualified” if Phred ≥ 8.\n🔹–unqualified_percent_limit 50 – Max 50% of bases can be low quality; reads exceeding this are discarded.\n🔹–length_required 150 – Discards reads shorter than 150 bases after filtering.\n🔹-w 16 – Sets the number of threads to 16.\n\n\n4.5 Quality control\nYou now have your initial consensus sequence. To increase your confidence in your sequence, always blast your consensus on NCBI. Using the top (or most appropriate reference), perform mapping again, this time using the updated reference.\nOpen the bam file (all_reads.bam) using UGENE and check the coverage pattern. Ugene can be downloaded from the software center. Check if there is any coverage bias. You can also use this file to compare to the consensus and check for allele frequency.\n\n\n\nExample\n\n\n\n\n4.6 Typing\nAfter consensus generation, you can create coverage plots and trees (shown in the next few chapters).\nDepending on the target, you can also check out some typing tools. For example, Genome Detective will automatically perform a subtyping analysis for the following supported viruses:\n\n\n\nExamples",
+    "crumbs": [
+      "Consensus Generation",
+      "Generating a Consensus Sequence"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Nanopore Metagenomics analysis manual",
+    "section": "",
+    "text": "1 Introduction\nWelcome to the Nanopore metagenomics sequencing manual! This manual provides a step by step guide for performing quality control, removing host reads, taxonomic classification, de novo assembly and consensus generation following sequencing using the GridION or PromethION.\nWe also have an automated pipeline for part of the metagenomics workflow, culminating in krona plots for taxonomic classification. Of course, being metagenomics, you don’t always know what you are looking for so consensus generation is quite ad hoc. Nevertheless, this manual will also help you generate consensus sequences step by step, along with some visualization and phylodynamics using the Nextstrain pipeline.\nUse the navigation bar to explore each section. Please start with the Preparation chapter regardless of following the manual or automation pipeline.",
+    "crumbs": [
+      "Nanopore Metagenomics analysis manual"
+    ]
+  },
+  {
+    "objectID": "Metagenomics_Automation.html",
+    "href": "Metagenomics_Automation.html",
+    "title": "Metagenomics Automation",
+    "section": "",
+    "text": "Warning\n\n\n\nMake sure you have read the Preparation chapter!\nIn the previous chapters, you learned how to perform each step of the Nanopore metagenomics sequencing analysis pipeline manually. While this is a valuable learning experience, it’s not practical for analyzing large datasets or for ensuring reproducibility in the long term.\nWe can make use of a tool called Snakemake to automate the previous steps into a single pipeline. With Snakemake, you can define the steps of your analysis in a Snakefile and then let Snakemake handle the execution, dependency management and error handling.",
+    "crumbs": [
+      "Classification",
+      "Metagenomics Automation"
+    ]
+  },
+  {
+    "objectID": "Metagenomics_Automation.html#preparing-to-run-the-workflow",
+    "href": "Metagenomics_Automation.html#preparing-to-run-the-workflow",
+    "title": "Metagenomics Automation",
+    "section": "1 Preparing to run the workflow",
+    "text": "1 Preparing to run the workflow\nTo run the automated pipeline, you need to fill out the excel sheet file_paths.xlsx within the Metagenomics_automation folder exactly as shown in the example below. Do not change the file name when saving! Here, you tell snakemake where to find your data.\n\n\n\nExample\n\n\n\n\n\n\n\n\nWarning\n\n\n\nRemember to update the run paths and barcodes for each sample!\n\n\nYou are nearly there!\nMake sure you are in the right folder to run the script.\ncd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Metagenomics_automation/ \nNow just copy the command below.\nsnakemake --cores 16\n\n\n\n\n\n\nTip\n\n\n\nIf its all green, everything is working. Just let it run in the background\n\n\nOnce the run is finished, please see the figure below to find your data.\n\n\n\nExample\n\n\n\n\n\n\n\n\nWarning\n\n\n\nRename the results folder with the run name (for example Viro_Run_0001).\nThis step is critical—if another Snakemake run is started without renaming, the previous output will be overwritten.\n\n\nTo rename, please use this example\ncd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Metagenomics_automation/\nmv results Viro_Run_0001\n\n1.1 False postive findings\nAfter viewing the krona plot within the krona folder, you may want to remove some false positive findings.\nYou can do this by going into the classification folder and opening up the report_standard.txt file. There you can set the number of reads back to zero for the false positive finding - remember in addition to setting the number of reads, you must also set the normalized percentage. Save with the same name.\n\n\n\n\n\n\nWarning\n\n\n\nRemember to be in the correct folder\n\n\ncd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Metagenomics_automation/Viro_Run_0001/barcode01/krona/\nRemove the original krona plot\nrm report.html\nThen just re-run snakemake (it will ignore previously made files and just focus on generating your updated krona plot)\nsnakemake --cores 16\nIn order to access your krona plot (and other files) within windows, you will need permission. Paste the following into the terminal:\nchmod 777 -R /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Viro_Run_0001/\nThis will take some",
+    "crumbs": [
+      "Classification",
+      "Metagenomics Automation"
+    ]
+  },
+  {
+    "objectID": "Phylodynamics.html",
+    "href": "Phylodynamics.html",
+    "title": "Generating Phylodynamic Trees",
+    "section": "",
+    "text": "While phylogenetic and phylodynamic trees both depict evolutionary relationships, phylodynamic trees incorporate temporal information and epidemiological models to understand how evolutionary patterns arise in the context of time and population dynamics, often using time-scaled trees.\nWe can apply the augur pipeline on Nextstrain to generate these timetrees. Augur is composed of a series of modules and different workflows which use different parts of the pipeline. A selection of the different input and output files are illustrated below.\nNextstrain maintains analyses of several selected pathogens, such as SARS-CoV-2 and influenza to show pathogen evolution and epidemic spread. Nextstrain continually update sequencing data for selected pathogens as new data is made publicly available. Automated pipelines are available for the following viral targets:",
+    "crumbs": [
+      "Phylodynamics",
+      "Generating Phylodynamic Trees"
+    ]
+  },
+  {
+    "objectID": "Phylodynamics.html#nextstrain---pre-set-automated-pipeline",
+    "href": "Phylodynamics.html#nextstrain---pre-set-automated-pipeline",
+    "title": "Generating Phylodynamic Trees",
+    "section": "1 Nextstrain - pre-set automated pipeline",
+    "text": "1 Nextstrain - pre-set automated pipeline\nPlease follow the steps for running an automated pipeline for the above pre-set targets on Nextstrain here.\nFor the purpose of this guide, we will now follow an example automated workflow for mpox\nIt would be a good idea to have all our Nextstrain builds in the same folder. Please create one now if you have not already done so.\ncd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/\nmkdir Nextstrain_builds\nYou also need to be in the right environment:\nconda deactivate nanopore_diagnostics\nconda activate nextstrain2025\n\n1.1 Download the references\nYou first need to go to the Nextstrain github page for your virus of interest. We will use mpoxas an example.\n Click Code and then Download ZIP. This zip contains all your scripts you need for the pipeline.\nNow extract and save your zipped file (in this case mpox-master) in our newly created folder Nextstrain_builds.\nYou now need to download all the curated reference sequences (these sequences are continually updated as new sequences become available). As the scripts contained in mpox-master assume you are within the ingest directory, please copy the following command:\ncd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/ingest/\nNow you can “fetch” all the curated reference sequences:\nnextstrain build . data/ncbi.ndjson",
+    "crumbs": [
+      "Phylodynamics",
+      "Generating Phylodynamic Trees"
+    ]
+  },
+  {
+    "objectID": "Phylodynamics.html#ingest-pipeline",
+    "href": "Phylodynamics.html#ingest-pipeline",
+    "title": "Generating Phylodynamic Trees",
+    "section": "2 Ingest pipeline",
+    "text": "2 Ingest pipeline\nNext you will run the “ingest” pipeline. The ingest pipeline in Nextstrain takes raw sequence data (e.g., from NCBI) and filters, standardizes and outputs cleaned fasta and metadata files named “sequences.fasta” and “metadata.tsv”. These are your input files for the next pipeline.\nnextstrain build .\n\n\n\n\n\n\nImportant\n\n\n\nCheck these two files have been created.\n\n\ncd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/ingest/results/\nls\n\n2.1 Now its time to add your sequences and metadata\n\nFirst add your individual fasta sequence(s) of interest to the “/mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/ingest/results/” folder. The sequence name and file name should match. To check the sequence name, open with bioedit, Aliview or notepad.\nYou next need to combine your downloaded reference fasta (named sequences.fasta) with your sequence(s) of interest (in this case we will use sample.fasta)\n\ncd /mnt/viro000-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/ingest/results/\ncat Sample.fasta &gt;&gt; sequences.fasta\n\n\n\n\n\n\nTip\n\n\n\nRemember cat just means concatenate.\n\n\n\nYou also need to combine your downloaded reference metadata (metadata.tsv) with the metadata of your virus of interest\n\nThe following image offers an example of the metadata layout. In the columns highlighted, please provide data.\n\n\n\nExample files\n\n\n\n\n\n\n\n\nWarning\n\n\n\nRemember to delete the pre-existing data in row two of the excel file (this is just an example) and replace with your own metadata!\n\n\n\n\n\n\n\n\nTip\n\n\n\nThe “strain” name should match the fasta file (e.g sample number). If the accession number is unknown, just use the same name as the “strain”. If the “date_released” and “date_updated” are unknown, just use the sampling date and then the date of this analysis. For fields such as clade, coverage and nonACGTN, please upload the sequences onto Nextclade. Just drag and drop the consensus sequences and select the right reference database (in this case mpox).\n\n\nSave the excel sheet as “new_metadata.txt” (tab-delimited) in the “/mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/ingest/results/” folder then change the file extension to tsv.\nNow run the following command to combine the metadata files:\ntail -n +2 new_metadata.tsv &gt;&gt; metadata.tsv\n🔹–tail -n +2 – skips the first line (header) of the new file.\nBelow you can see an example of the files:\n\n\n\nExample files\n\n\n\n\n2.2 Manually add your updated files for the next script\nNext you need to copy your updated files (sequence.fasta and metadata.tsv) into another folder (phylogenetic) for the next script:\ncp /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/ingest/results/sequences.fasta /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/phylogenetic/data/\ncp /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/ingest/results/metadata.tsv /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/phylogenetic/data/\n\n\n2.3 Phylogenetic pipeline\nOnce you have coped over the files, make sure you are in the right folder:\ncd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/phylogenetic/\nNow just run the following command. The phylogenetic pipeline uses the cleaned fasta and metadata from ingest, aligns sequences, builds and refines a phylogenetic tree, annotates it with traits or mutations, and outputs an Auspice JSON ready for interactive visualization.\nnextstrain build .\nJust let the script run.\n\n\n2.4 Visualization\nOnce the script has finished, please run the following command. This will open your phylodynamic tree on a web browser for visualization.\nnextstrain view .\nUse the filter to find your sequences (zoom into the tree by clicking branches). Play around with the different metadata fields (e.g. country, genotype etc.), tree layouts and branch lengths (time and divergence).\n\n\n\nMpox example\n\n\n\n\n\n\n\n\nImportant\n\n\n\nRemember to update all paths for each target or sequence of interest!",
+    "crumbs": [
+      "Phylodynamics",
+      "Generating Phylodynamic Trees"
+    ]
+  },
+  {
+    "objectID": "Phylodynamics.html#nextstrain---creating-your-own-pipeline",
+    "href": "Phylodynamics.html#nextstrain---creating-your-own-pipeline",
+    "title": "Generating Phylodynamic Trees",
+    "section": "3 Nextstrain - creating your own pipeline",
+    "text": "3 Nextstrain - creating your own pipeline\nIf your selected target is not available, don’t worry! It will take a little bit more effort, but we can make our own pipeline. For more information click here\nThere are quite a few commands in the pipeline so lets break it up!\nFor the purpose of this guide, we will again use rhinovirus A as a study virus.\n\n\n\n\n\n\nWarning\n\n\n\nMake sure you have read through and completed any tasks in the Preparation and Reference collection chapter!\n\n\nYou first need to be in the right environment\nconda activate nextstrain2025\nWhile a Snakemake workflow could be created, the parameters often vary between pathogens. For now, this step is performed ad hoc (and within your sample folder of interest).\nWe will now add an additional folder for Nextstrain within your barcode of interest.\ncd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Viro_Run_0001/barcode01/\nmkdir Nextstrain\n\n\n\n\n\n\nImportant\n\n\n\nAll your input files should be in this folder. If you have also created a phylogenetic tree in the previous chapter, your input sequences and metadata file will be in the folder “Tree”. You need to move them into the new “Nextstrain” folder!\n\n\n\n3.1 Make sure you are in the right path\ncd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Viro_Run_0001/barcode01/Nextstrain/\n\n\n3.2 Indexing\nThis step prepares your input sequences by indexing them, making it easier and faster for downstream tools to look up and access specific entries efficiently.\naugur index --sequences RVA_sequences.fasta –output index.tsv\n🔹–sequences RVA_sequences.fasta – Input FASTA file containing RVA sequences.\n🔹–output index.tsv – Generates an indexed TSV file of the sequences for downstream reference.\n\n\n3.3 Aligning\nAligns all your sequences to a common reference frame so that they’re directly comparable, base by base. This is necessary for identifying mutations and building a phylogenetic tree.\naugur align --sequences RVA_sequences.fasta --output sequences_aligned.fasta --fill-gaps\n🔹–sequences RVA_sequences.fasta – Input unaligned nucleotide sequences.\n🔹–output sequences_aligned.fasta – Output aligned sequences in FASTA format.\n🔹–fill-gaps – Fills internal alignment gaps with reference characters for consistency.\n\n\n\n\n\n\nImportant\n\n\n\nAlways check the alignment file (using bioedit or aliview). You may need to remove reference sequences which are problematic. Remember to also remove or update these references in the metadata.tsv file and re-run the alignment.\n\n\n\n\n3.4 Generating a raw tree\nConstructs a basic phylogenetic tree from the aligned sequences using a selected algorithm (e.g., IQ-TREE). This tree shows the relationships between sequences based on their similarity.\naugur tree --alignment sequences_aligned.fasta --output tree_raw.nwk --substitution-model GTR+G --method iqtree --nthreads 16\n🔹–alignment sequences_aligned.fasta – Input aligned FASTA file.\n🔹–output tree_raw.nwk – Outputs a raw tree in Newick format.\n🔹–substitution-model GTR+G – Sets the substitution model to General Time Reversible with Gamma-distributed rate variation.\n🔹–method iqtree – Uses IQ-TREE as the inference engine.\n🔹–nthreads 16 – Allocates 16 CPU threads.\n\n\n\n\n\n\nTip\n\n\n\nThe substitution-model may need to be updated depending on the test or target. GTR+G is a typical model used.\n\n\n\n\n3.5 Refining the tree\nThis is one of the most important steps. It improves the initial tree by:\n-Calibrating it against sample collection dates to build a time-scaled phylogeny.\n-Correcting uncertain or poor-quality branches.\n-Estimating how the sequences evolved over time.\n-Incorporating metadata to enrich tree interpretation\naugur refine --tree tree_raw.nwk k --alignment sequences_aligned.fasta --metadata meta_data.tsv --output-tree tree.nwk --output-node-data branch_lengths.json --timetree --coalescent skyline --covariance --precision 3 --date-confidence --date-inference marginal --branch-length-inference auto --clock-filter-iqd 0 --divergence-unit mutations-per-site --stochastic-resolve\n🔹–tree tree_raw.nwk – Input raw tree.\n🔹–alignment sequences_aligned.fasta – Same alignment used in tree generation.\n🔹–metadata meta_data.tsv – Sample metadata file with collection dates, genotypes, etc.\n🔹–output-tree tree.nwk – Refined tree output.\n🔹–output-node-data branch_lengths.json – Stores branch length data for visualization.\n🔹–timetree – Converts the tree into a time-resolved tree using sample dates.\n🔹–coalescent skyline – Uses a skyline coalescent model for demographic inference.\n🔹–covariance – Enables covariance-aware date inference.\n🔹–branch-length-inference auto – Lets Augur choose best branch length method.\n🔹–clock-filter-iqd 0 – Filters outlier sequences by interquartile deviation (set to 0 to disable).\n🔹–divergence-unit mutations-per-site – Units used for tree scale.\n🔹–stochastic-resolve – Randomly resolves polytomies for better visualization.\n\n\n\n\n\n\nImportant\n\n\n\nDepending on the target or test, you may need to update these parameters.\n\n\n\n3.5.1 Additional help with selecting parameters for the “refine” step:\n🔹 –coalescent – This models how the tree should behave in time:\nskyline: assumes population size changes over time (flexible, good for outbreaks).\nconstant: assumes a constant population size over time.\nUse skyline if you expect varying infection rates or changing sampling over time.\n \n🔹 –branch-length-inference – Controls how the branch lengths (evolutionary distances) are interpreted:\nauto: lets Augur decide the best method.\njoint: all branch lengths are estimated together for best overall fit.\nmarginal: branch lengths are optimized one node at a time (faster, less precise).\nStick with auto unless you’re troubleshooting.\n \n🔹 –clock-filter-iqd – This removes outlier sequences that don’t fit the molecular clock:\nValue of 0 disables it. Use 0 when you see strange branching or inconsistent sample dates.\nTypical values: 2 or 4 to exclude sequences with timing or mutation issues.\n \n🔹 –precision – Controls numeric rounding (e.g., for branch lengths, mutation counts):\n3 is standard (0.001 resolution).\nYou can increase to 5 for greater detail, or lower for simplicity.\n \n\n\n\n3.6 Adding traits\nMaps sample metadata (like genotype or country) onto the tree to track how traits evolve or spread over time and geography. Useful for epidemiological insights.\naugur traits --tree tree.nwk --metadata meta_data.tsv --columns genotype country --output-node-data traits.json –confidence\n🔹–tree tree.nwk – Input refined tree.\n🔹–metadata meta_data.tsv – Metadata with traits (like genotype or country).\n🔹–columns genotype country – Traits to be inferred and displayed.\n🔹–output-node-data traits.json – Outputs node trait information.\n🔹–confidence – Adds confidence estimates for trait assignment.\n\n\n\n\n\n\nWarning\n\n\n\nTraits are extracted from the metadata.tsv file. In this example, the traits used are genotype and country, which must exist as columns in your metadata file. Be sure to update the command to match the columns available in your own metadata.tsv.\n\n\n\n\n3.7 Adding mutation data\nInfers what the ancestral sequences probably looked like at each node of the tree and what mutations occurred along each branch (at the nucleotide level).\naugur ancestral --tree tree.nwk --alignment sequences_aligned.fasta --output-node-data nt_muts.json --inference joint\n🔹–tree tree.nwk – Refined tree input.\n🔹–alignment sequences_aligned.fasta – Aligned sequences.\n🔹–output-node-data nt_muts.json – Outputs inferred nucleotide mutations.\n🔹–inference joint – Uses joint inference (best for overall consistency).\n\n\n3.8 Adding protein data\nConverts inferred nucleotide mutations into amino acid changes (protein mutations), which are often more biologically meaningful.\naugur translate --tree tree.nwk --ancestral-sequences nt_muts.json --reference-sequence FJ445111.gb --output-node-data aa_muts.json\n🔹–tree tree.nwk – Phylogenetic tree.\n🔹–ancestral-sequences nt_muts.json – File with nucleotide mutations.\n🔹–reference-sequence FJ445111.gb – GenBank reference for translation. In our case, FJ445111.gb is for RVA. Remember to update!\n🔹–output-node-data aa_muts.json – Outputs amino acid mutations.\n\n\n\n\n\n\nImportant\n\n\n\nRemember to update the reference gb sequence. This is typically a root or prototype strain—such as the Fermon strain for EV-D68 or the Wuhan reference strain for SARS-CoV-2. If unsure, use an official curated reference from RefSeq. Place the gb sequence in the same folder before running the command.\n\n\n\n\n3.9 Exporting\nPackages all tree, metadata, mutation and trait data into a .json file that can be visualized using Auspice, the interactive Nextstrain viewer\naugur export v2 --tree tree.nwk --metadata meta_data.tsv --node-data branch_lengths.json traits.json nt_muts.json aa_muts.json --output final_output.json --color-by-metadata genotype country\n🔹–tree tree.nwk – Tree file for final visualization.\n🔹–metadata meta_data.tsv – Sample metadata.\n🔹–node-data … – Adds all prior data files (traits, mutations and branch lengths).\n🔹–output final_output.json – Combined JSON for Auspice visualization.\n🔹–color-by-metadata genotype country – Defines traits for coloring in the final tree.\n\n\n\n\n\n\nWarning\n\n\n\n–color-by-metadata parameter must match your metadata.tsv file. The example includes “genotype” and “country”. These must be columns present in your metadata.tsv file.\n\n\n\n\n3.10 Visulization\nFollow this link to open auspice. Auspice allows an interactive exploration of phylogenomic datasets by simply dragging & dropping.\nDrag and drop the final_output.json file onto the webpage. This file contains all your sequencing and metadata.\n\n\n\nExample Nextstrain tree\n\n\nUse the filter to find your sequences (zoom into the tree by clicking branches). Play around with the different metadata fields (e.g. country, genotype etc.), tree layouts and branch lengths (time and divergence).\n\n\n\n\n\n\nTip\n\n\n\nIf the tree doesn’t appear accurate, you may need to spend more time adjusting the reference sequences or fine-tuning the parameters.\n\n\nIf you scroll to the end of aupice, you will also see the nucleotide diversity per site.\n\n\n\nExample\n\n\nYou now have your phylodynamic tree!",
+    "crumbs": [
+      "Phylodynamics",
+      "Generating Phylodynamic Trees"
+    ]
+  },
+  {
+    "objectID": "Preparation.html",
+    "href": "Preparation.html",
+    "title": "Preparation",
+    "section": "",
+    "text": "Before running either pipeline (manual or automatic), create a new run folder (e.g. Viro_Run_0001). This will be the folder where you will have all your files from a particular run.\nFor example:\ncd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/ \nmkdir Viro_Run_0001\n\n\n\n\n\n\nTip\n\n\n\n“cd” means change directory (or path) and “mkdir” means to create a new directory (or folder)\n\n\nBefore you perform any analysis, you need to be in the right conda environment. This means you need to be in the right container which includes all necessary software dependencies and helper scripts. We will use the environment “nanopore_diagnostics” for most of our analysis (except for assembly and nextstrain). To activate this environment, please copy the following into your terminal.\nconda activate nanopore_diagnostics\n\n\n\n\n\n\nImportant\n\n\n\nFor the automation pipeline, now go to Metagenomics Automation\n\n\n\n\nCopy all barcodes of interest from the raw nanopore folder, along with the report file into this newly created folder (e.g. Viro_Run_0001). Each barcode will contain all the fastq.gz files generated by your run.\nFor example:\ncp -r /mnt/viro0002-nanopore/GRIDIon_Viro_Run_0001/barcode01 /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Viro_Run_0001/\n\n\n\n\n\n\nTip\n\n\n\n“cp” means copy.\n\n\n\n\n\nFolder example\n\n\nIf you are following the manual pipeline, the next steps are still required for each barcode. To keep track of your analysis, you can open notepad++ and create a command log for each barcode per run. This should be saved within the Diagnostics_metagenomics folder.\n\n\n\n\n\n\nWarning\n\n\n\nRemember to always update the path for the specific run number or barcode of interest\n\n\nFirst, make sure you are in the right path.\ncd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Viro_Run_0001/barcode01/\nls\n\n\n\n\n\n\nTip\n\n\n\n“ls” means list all the files in the current folder.\n\n\nNext, the fastq reads need to be concatenated (or combined) into one file to streamline analysis.\nzcat *.fastq.gz &gt; all_reads.fastq\n\n\n\n\n\n\nTip\n\n\n\n“zcat” is used to unzip and concatenate fastq.gz files. You can use the * to include all files with the same extension. If you want to concatenate fasta or fastq files, you can use cat instead.\n\n\nTo organize your workspace, you can move all fastq.gz files into a new raw folder within the current directory. This folder can be deleted after your analysis is complete, as the original fastq.gz files will remain stored in the original nanopore raw directory (see figure above).\nmkdir raw\nmv *.fastq.gz raw\n\n\n\n\n\n\nTip\n\n\n\n“mv” means move.\n\n\nCreate further directories for the next few chapters:\nmkdir Kraken2_standard\n\n\n\n\n\n\nTip\n\n\n\nType pwd if you ever want to check what folder you are currently in. “pwd” means print working directory.\n\n\n\n\n\n\n\n\nWarning\n\n\n\nThroughout this pipeline, the output file names are typically not changed. This way you don’t need to keep changing for each path. Please remember if you are in the wrong path, you will replace all your files with the new ones!",
+    "crumbs": [
+      "Preparation"
+    ]
+  },
+  {
+    "objectID": "Preparation.html#manual-pipeline",
+    "href": "Preparation.html#manual-pipeline",
+    "title": "Preparation",
+    "section": "",
+    "text": "Copy all barcodes of interest from the raw nanopore folder, along with the report file into this newly created folder (e.g. Viro_Run_0001). Each barcode will contain all the fastq.gz files generated by your run.\nFor example:\ncp -r /mnt/viro0002-nanopore/GRIDIon_Viro_Run_0001/barcode01 /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Viro_Run_0001/\n\n\n\n\n\n\nTip\n\n\n\n“cp” means copy.\n\n\n\n\n\nFolder example\n\n\nIf you are following the manual pipeline, the next steps are still required for each barcode. To keep track of your analysis, you can open notepad++ and create a command log for each barcode per run. This should be saved within the Diagnostics_metagenomics folder.\n\n\n\n\n\n\nWarning\n\n\n\nRemember to always update the path for the specific run number or barcode of interest\n\n\nFirst, make sure you are in the right path.\ncd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Viro_Run_0001/barcode01/\nls\n\n\n\n\n\n\nTip\n\n\n\n“ls” means list all the files in the current folder.\n\n\nNext, the fastq reads need to be concatenated (or combined) into one file to streamline analysis.\nzcat *.fastq.gz &gt; all_reads.fastq\n\n\n\n\n\n\nTip\n\n\n\n“zcat” is used to unzip and concatenate fastq.gz files. You can use the * to include all files with the same extension. If you want to concatenate fasta or fastq files, you can use cat instead.\n\n\nTo organize your workspace, you can move all fastq.gz files into a new raw folder within the current directory. This folder can be deleted after your analysis is complete, as the original fastq.gz files will remain stored in the original nanopore raw directory (see figure above).\nmkdir raw\nmv *.fastq.gz raw\n\n\n\n\n\n\nTip\n\n\n\n“mv” means move.\n\n\nCreate further directories for the next few chapters:\nmkdir Kraken2_standard\n\n\n\n\n\n\nTip\n\n\n\nType pwd if you ever want to check what folder you are currently in. “pwd” means print working directory.\n\n\n\n\n\n\n\n\nWarning\n\n\n\nThroughout this pipeline, the output file names are typically not changed. This way you don’t need to keep changing for each path. Please remember if you are in the wrong path, you will replace all your files with the new ones!",
+    "crumbs": [
+      "Preparation"
+    ]
+  },
+  {
+    "objectID": "Quality_Control.html",
+    "href": "Quality_Control.html",
+    "title": "Quality Control",
+    "section": "",
+    "text": "1 Trimming\nWhile native barcoding adapters do not need to be manually removed (as MinKNOW will handle this if specified by the user), SISPA primers SolA (anchor primer) and SolB (PCR primer) must be trimmed. Cutadapt is well-suited for this task, offering flexible options for primer removal, read filtering and sequence modification.\ncutadapt -e 0.2 -n 5 -j 32 -m 200 -u 9 -g GTTTCCCACTGGAGGATA -a TATCCTCCAGTGGGAAAC --revcomp all_reads.fastq &gt; all_reads_trimmed.fastq 2&gt; trimlog_fwd.txt\n🔹all_reads.fastq – this is your input FASTQ file\n🔹all_reads_trimmed.fastq – this is your cleaned/trimmed reads\n🔹trimlog_fwd.txt – log file\n🔹-e – This allows up to 20% mismatches between the read and adapter\n🔹-n – 5 rounds of adapter trimming\n🔹-j – number of threads\n🔹-m – Minimum read length after trimming\n🔹-u – Trim bases to account for random priming\n🔹–revcomp – Also scan reverse-complemented reads\n🔹-g – 5’ adapter\n🔹-a – 3’ adapter\n\n\n\n\n\n\nWarning\n\n\n\nRemember to update the min read length “-m 200” if required. For example Sanger sequencing targets. The rest of the parameters are unlikely to change.\n\n\n\n\n2 Quality Statistics\nNext, we can generate read statistics using Fastp, a flexible tool for quality control and processing of FASTQ data. Fastp can be used to remove low-quality reads and short sequences. Pay close attention to the total number of reads (post-QC), the total number of nucleotides (post-QC), and the average read length. Record these values for each sample in the Excel results sheet.\nfastp -i all_reads_trimmed.fastq -o all_reads_QC.fastq -j /dev/null --low_complexity_filter -h all_reads_QC.html --disable_trim_poly_g --disable_adapter_trimming --qualified_quality_phred 7 --unqualified_percent_limit 50 --length_required 200 -w 16\n🔹-i all_reads_trimmed.fastq – Input FASTQ file which has just been trimmed\n🔹-o all_reads_QC.fastq – Output FASTQ file; this will be your cleaned and filtered reads\n🔹-j /dev/null – Disables the JSON report as it’s not required\n🔹–low_complexity_filter – Removes low-complexity reads (e.g., homopolymer-rich), which are often uninformative\n🔹-h all_reads_QC.html – Produces a visual quality report used for read statistics\n🔹–disable_trim_poly_g – Disables this trimming feature (more relevant to Illumina reads)\n🔹–disable_adapter_trimming – Disables adapter trimming (assumes it’s already handled or unnecessary)\n🔹–qualified_quality_phred 7 – A base is “qualified” if Phred ≥ 7 (~1 in 5 chance of error)\n🔹–unqualified_percent_limit 50 – Max 50% of bases can be low quality; reads exceeding this are discarded\n🔹–length_required 200 – Discards reads shorter than 200 bases after filtering\n🔹-w 16 – Sets the number of threads to 16\n\n\n\n\n\n\nWarning\n\n\n\nRemember to update the min read length “-m 200” if required. For example Sanger sequencing targets. The rest of the parameters are unlikely to change.",
+    "crumbs": [
+      "Quality Control"
+    ]
+  },
+  {
+    "objectID": "Taxonomic_Classification.html",
+    "href": "Taxonomic_Classification.html",
+    "title": "Taxonomic Classification",
+    "section": "",
+    "text": "We perform taxonomic classification using Kraken2, a tool that assigns reads based on k-mer matches (short nucleotide sequences of a defined length). Taxonomic classification is a hierarchical system that organizes organisms into increasingly specific groups based on shared characteristics and evolutionary relationships.\nThis step involves a few commands. Lets break it up.\n\n\nYou should have already created the “kraken2_standard” folder in the Preparation chapter.\ncd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Viro_Run_0001/barcode01/kraken2_standard/ \n\n\n\n\n\n\nWarning\n\n\n\nRemember to update the run paths and barcodes for each sample!\n\n\n\n\n\nNext, you need to specify the location of the Kraken2 database, the input reads (e.g., all_reads_QC_hg19.fastq), and the desired output file along with its destination.\ncd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Viro_Run_0001/barcode01/\nkraken2 --db /mnt/viro0002-data/workgroups_projects/Bioinformatics/DB/Kraken2/Standard --use-names --report-zero-counts --threads 16 --report report_standard.txt --output assignments.txt all_reads_QC_hg19.fastq\n🔹–use-names – Outputs taxonomic names instead of just numeric taxon IDs, making the report more readable.\n🔹–zero-counts – Includes taxa that have zero reads assigned in the report. Useful for comprehensive taxonomic overviews.\n🔹–threads 16 – Runs the classification using 16 CPU threads to speed up the analysis.\n🔹–report report.txt – Generates a detailed, tab-delimited classification report (used for downstream visualization like Krona which we will use).\n🔹–output kraken_output.txt – Outputs individual read classification results, listing each read and its assigned taxon.\nTo make things easier (and faster), you can search for specific phrases within the assignments file in the Kraken2 output. As we are only interested in virues, we can extract only viral entries.\nawk '{for (i=3; i&lt;=NF; i++) s = s $i \" \"; if (s ~ /virus/ || s ~ /viridae/) print; s=\"\"}' assignments.txt &gt; virus_only.txt\n🔹awk – A powerful text processing tool used for pattern scanning and processing.\n🔹{for (i=3; i&lt;=NF; i++) s = s $i ” “; …} – A block of instructions.\n🔹if (s ~ /virus/) print; – screens for the word ”virus”and “Viridae”. 🔹virus_only.txt – The new output file containing only lines where the word “virus” was found.",
+    "crumbs": [
+      "Classification",
+      "Taxonomic Classification"
+    ]
+  },
+  {
+    "objectID": "Taxonomic_Classification.html#make-sure-you-are-in-the-right-folder.",
+    "href": "Taxonomic_Classification.html#make-sure-you-are-in-the-right-folder.",
+    "title": "Taxonomic Classification",
+    "section": "",
+    "text": "You should have already created the “kraken2_standard” folder in the Preparation chapter.\ncd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Viro_Run_0001/barcode01/kraken2_standard/ \n\n\n\n\n\n\nWarning\n\n\n\nRemember to update the run paths and barcodes for each sample!",
+    "crumbs": [
+      "Classification",
+      "Taxonomic Classification"
+    ]
+  },
+  {
+    "objectID": "Taxonomic_Classification.html#kraken2",
+    "href": "Taxonomic_Classification.html#kraken2",
+    "title": "Taxonomic Classification",
+    "section": "",
+    "text": "Next, you need to specify the location of the Kraken2 database, the input reads (e.g., all_reads_QC_hg19.fastq), and the desired output file along with its destination.\ncd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Viro_Run_0001/barcode01/\nkraken2 --db /mnt/viro0002-data/workgroups_projects/Bioinformatics/DB/Kraken2/Standard --use-names --report-zero-counts --threads 16 --report report_standard.txt --output assignments.txt all_reads_QC_hg19.fastq\n🔹–use-names – Outputs taxonomic names instead of just numeric taxon IDs, making the report more readable.\n🔹–zero-counts – Includes taxa that have zero reads assigned in the report. Useful for comprehensive taxonomic overviews.\n🔹–threads 16 – Runs the classification using 16 CPU threads to speed up the analysis.\n🔹–report report.txt – Generates a detailed, tab-delimited classification report (used for downstream visualization like Krona which we will use).\n🔹–output kraken_output.txt – Outputs individual read classification results, listing each read and its assigned taxon.\nTo make things easier (and faster), you can search for specific phrases within the assignments file in the Kraken2 output. As we are only interested in virues, we can extract only viral entries.\nawk '{for (i=3; i&lt;=NF; i++) s = s $i \" \"; if (s ~ /virus/ || s ~ /viridae/) print; s=\"\"}' assignments.txt &gt; virus_only.txt\n🔹awk – A powerful text processing tool used for pattern scanning and processing.\n🔹{for (i=3; i&lt;=NF; i++) s = s $i ” “; …} – A block of instructions.\n🔹if (s ~ /virus/) print; – screens for the word ”virus”and “Viridae”. 🔹virus_only.txt – The new output file containing only lines where the word “virus” was found.",
+    "crumbs": [
+      "Classification",
+      "Taxonomic Classification"
+    ]
+  },
+  {
+    "objectID": "Taxonomic_Classification.html#interpretation",
+    "href": "Taxonomic_Classification.html#interpretation",
+    "title": "Taxonomic Classification",
+    "section": "2.1 Interpretation",
+    "text": "2.1 Interpretation\nWhat is clinically relevant?\nViruses are considered relevant if they have been associated with clinical symptoms consistent with disease.\n• Usually a target on current molecular assays\n• Literature\n• Experience (through screening many datasheets of different sample materials)\n• Patient metadata\n• Clinical history (age, immune status etc.)\n• Clinical presentation (and sample material)\nWe can only report what we find (or what is likely), a multidisciplinary clinical team is still needed to determine final causative agent of the patient’s clinical presentation\nA few examples have been provided to help with interpretation.\n\n\n\nExample 1\n\n\n\n\n\n\n\n\nImportant\n\n\n\nThis detection could not be confirmed and will not be reported.\n\n\n\n\n\nExample 2\n\n\n\n\n\n\n\n\nImportant\n\n\n\nThis detection could not be confirmed and will not be reported.",
+    "crumbs": [
+      "Classification",
+      "Taxonomic Classification"
+    ]
+  }
+]

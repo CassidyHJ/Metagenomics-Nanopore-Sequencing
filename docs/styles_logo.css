@@ -1,0 +1,10 @@
+/* Show logo above right-hand TOC */
+.sidebar-right::before {
+  content: "";
+  display: block;
+  background: url("images/logo.png") no-repeat center;
+  background-size: contain;
+  width: 120px;     /* Adjust width */
+  height: 60px;     /* Adjust height */
+  margin: 0 auto 1rem auto; /* Center and add space below */
+}
