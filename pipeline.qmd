@@ -1,0 +1,34 @@
+---
+title: "Pipeline Stages"
+jupyter: python3
+---
+
+# Taxonomic Classification
+
+```{bash}
+kraken2 --db kraken_db --report report.txt --output kraken_output.txt non_host.fastq
+```
+
+## Visualization
+
+```{bash}
+ktImportTaxonomy -o krona_report.html report.txt
+```
+
+## Metagenomics Automation
+
+```{bash}
+snakemake --cores 4
+```
+
+# Generating a Consensus Sequence
+
+Use minimap2 and samtools for alignment and variant calling.
+
+## Consensus Visualization
+
+Visual inspection using IGV or bam-readcount.
+
+## Phylodynamics
+
+Run tree inference with tools like IQ-TREE or TreeTime, then visualize with Auspice or iTOL.

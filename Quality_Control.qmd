@@ -1,0 +1,59 @@
+---
+title: "Quality Control"
+editor: visual
+jupyter: python3
+---
+
+# Trimming
+
+While native barcoding adapters do not need to be manually removed (as MinKNOW will handle this if specified by the user), SISPA primers SolA (anchor primer) and SolB (PCR primer) must be trimmed. [Cutadapt](https://cutadapt.readthedocs.io/en/stable/) is well-suited for this task, offering flexible options for primer removal, read filtering and sequence modification.
+
+``` bash
+cutadapt -e 0.2 -n 5 -j 32 -m 200 -u 9 -g GTTTCCCACTGGAGGATA -a TATCCTCCAGTGGGAAAC --revcomp all_reads.fastq > all_reads_trimmed.fastq 2> trimlog_fwd.txt
+```
+
+🔹<strong style="color:darkblue">all_reads.fastq</strong> – this is your input FASTQ file\
+🔹<strong style="color:darkblue">all_reads_trimmed.fastq</strong> – this is your cleaned/trimmed reads\
+🔹<strong style="color:darkblue">trimlog_fwd.txt</strong> – log file\
+🔹<strong style="color:darkblue">-e</strong> – This allows up to 20% mismatches between the read and adapter\
+🔹<strong style="color:darkblue">-n</strong> – 5 rounds of adapter trimming\
+🔹<strong style="color:darkblue">-j</strong> – number of threads\
+🔹<strong style="color:darkblue">-m</strong> – Minimum read length after trimming\
+🔹<strong style="color:darkblue">-u</strong> – Trim bases to account for random priming\
+🔹<strong style="color:darkblue">--revcomp</strong> – Also scan reverse-complemented reads\
+🔹<strong style="color:darkblue">-g</strong> – 5' adapter\
+🔹<strong style="color:darkblue">-a</strong> – 3' adapter
+
+::: callout-warning
+## Warning
+
+Remember to update the min read length "-m **200**" if required. For example Sanger sequencing targets. The rest of the parameters are unlikely to change.
+:::
+
+# Quality Statistics
+
+Next, we can generate read statistics using [Fastp](https://github.com/OpenGene/fastp), a flexible tool for quality control and processing of FASTQ data. Fastp can be used to remove low-quality reads and short sequences. Pay close attention to the total number of reads (post-QC), the total number of nucleotides (post-QC), and the average read length. Record these values for each sample in the Excel results sheet.
+
+``` bash
+fastp -i all_reads_trimmed.fastq -o all_reads_QC.fastq -j /dev/null --low_complexity_filter -h all_reads_QC.html --disable_trim_poly_g --disable_adapter_trimming --qualified_quality_phred 7 --unqualified_percent_limit 50 --length_required 200 -w 16
+```
+
+🔹<strong style="color:darkblue">-i all_reads_trimmed.fastq</strong> – Input FASTQ file which has just been trimmed\
+🔹<strong style="color:darkblue">-o all_reads_QC.fastq</strong> – Output FASTQ file; this will be your cleaned and filtered reads\
+🔹<strong style="color:darkblue">-j /dev/null</strong> – Disables the JSON report as it's not required\
+🔹<strong style="color:darkblue">--low_complexity_filter</strong> – Removes low-complexity reads (e.g., homopolymer-rich), which are often uninformative\
+🔹<strong style="color:darkblue">-h all_reads_QC.html</strong> – Produces a visual quality report used for read statistics\
+🔹<strong style="color:darkblue">--disable_trim_poly_g</strong> – Disables this trimming feature (more relevant to Illumina reads)\
+🔹<strong style="color:darkblue">--disable_adapter_trimming</strong> – Disables adapter trimming (assumes it’s already handled or unnecessary)\
+🔹<strong style="color:darkblue">--qualified_quality_phred 7</strong> – A base is "qualified" if Phred ≥ 7 (\~1 in 5 chance of error)\
+🔹<strong style="color:darkblue">--unqualified_percent_limit 50</strong> – Max 50% of bases can be low quality; reads exceeding this are discarded\
+🔹<strong style="color:darkblue">--length_required 200</strong> – Discards reads shorter than 200 bases after filtering\
+🔹<strong style="color:darkblue">-w 16</strong> – Sets the number of threads to 16
+
+::: callout-warning
+## Warning
+
+Remember to update the min read length "-m **200**" if required. For example Sanger sequencing targets. The rest of the parameters are unlikely to change.
+:::
+
+------------------------------------------------------------------------

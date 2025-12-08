@@ -1,0 +1,21 @@
+---
+title: "Inputs & Preparation"
+jupyter: python3
+---
+
+# Preparation
+
+Before running the pipeline, ensure all required software, databases, and input files are prepared.
+
+- Input files:
+  - Raw Nanopore reads (FASTQ)
+  - Sample metadata or mapping file (optional)
+  - Excel file with paths/configuration
+
+# Load Excel Config (Python Example)
+
+```{python}
+import pandas as pd
+df = pd.read_excel("file_paths.xlsx")  # make sure file_paths.xlsx exists
+df.head()
+```

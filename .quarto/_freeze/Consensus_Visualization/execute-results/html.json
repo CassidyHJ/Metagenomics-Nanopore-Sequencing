@@ -1,0 +1,12 @@
+{
+  "hash": "91a499f4c80bde423328bd8594c406d6",
+  "result": {
+    "engine": "jupyter",
+    "markdown": "---\ntitle: \"Consensus Visualization\"\neditor: visual\njupyter: python3\n---\n\n\n\n\n## Creating coverage plots\n\n[weeSAM](https://github.com/centre-for-virus-research/weeSAM) can be used for generating coverage plots and providing statistics based on the bam file.\n\nMake sure you are in the right path\n\n``` bash\ncd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Viro_Run_0001/barcode01/\n```\n\n::: callout-warning\n## Warning\n\nRemember to update the run paths and barcodes for each sample!\n:::\n\nNow just copy the command below:\n\n``` bash\nweeSAM --bam all_reads.bam --html coverage_plot\n```\n\n![Example](coverage.jpg)\n\nIn the newly created folder **\"coverage_plot_html_results\"**, click on \"figures\" then \"all_reads_figures\" until you find the html report.\n\n",
+    "supporting": [
+      "Consensus_Visualization_files"
+    ],
+    "filters": [],
+    "includes": {}
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: \"Inputs & Preparation\"\n",
+        "jupyter: python3\n",
+        "---\n",
+        "\n",
+        "\n",
+        "# Preparation\n",
+        "\n",
+        "Before running the pipeline, ensure all required software, databases, and input files are prepared.\n",
+        "\n",
+        "- Input files:\n",
+        "  - Raw Nanopore reads (FASTQ)\n",
+        "  - Sample metadata or mapping file (optional)\n",
+        "  - Excel file with paths/configuration\n",
+        "\n",
+        "# Load Excel Config (Python Example)\n"
+      ],
+      "id": "d5c61f50"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "import pandas as pd\n",
+        "df = pd.read_excel(\"file_paths.xlsx\")  # make sure file_paths.xlsx exists\n",
+        "df.head()"
+      ],
+      "id": "685cfd28",
+      "execution_count": null,
+      "outputs": []
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "python3",
+      "language": "python",
+      "display_name": "Python 3 (ipykernel)",
+      "path": "C:\\Users\\Hayley Cassidy\\AppData\\Local\\Programs\\Python\\Python313\\share\\jupyter\\kernels\\python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}

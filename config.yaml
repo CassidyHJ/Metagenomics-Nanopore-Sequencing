@@ -1,0 +1,10 @@
+# Global settings
+min_read_length: 200
+
+# Adapter sequences for trimming
+adapter_fwd: "GTTTCCCACTGGAGGATA"
+adapter_rev: "TATCCTCCAGTGGGAAAC"
+
+# Paths to reference data
+reference_genome: "/mnt/viro0002/workgroups_projects/Bioinformatics/DB/HG38/GCF_000001405.26_GRCh38_genomic.fna.gz"
+kraken_db: "/mnt/viro0002/workgroups_projects/Bioinformatics/DB/Kraken2/Standard"

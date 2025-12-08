@@ -1,0 +1,43 @@
+project:
+  type: website
+
+website:
+  title: "Metagenomics Nanopore Workflow"
+  sidebar:
+    style: "floating"
+    logo: images/logo.png   # <-- must be indented here
+    contents:
+      - index.qmd
+      - Preparation.qmd
+      - Quality_Control.qmd
+      - Removing_host_reads.qmd
+      - section: "Classification"
+        contents:
+          - Taxonomic_Classification.qmd
+          - Visualization.qmd
+          - Metagenomics_Automation.qmd
+      - section: "Assembly"
+        contents:
+          - Assembly.qmd
+      - section: "Consensus Generation"
+        contents:
+          - Generating_Consensus.qmd
+          - Consensus_Visualization.qmd
+      - section: "Phylodynamics"
+        contents:
+          - Preparation_and_Reference_Collection.qmd
+          - Generating_Phylogenetic_Trees.qmd
+          - Phylodynamics.qmd
+  page-navigation: true
+
+format:
+  html:
+    css: styles_logo.css
+    toc: true
+    toc-location: left
+    number-sections: true
+    code-copy: true
+    theme: cosmo
+    metadata:
+      author: "Hayley Cassidy"
+      date: "today"

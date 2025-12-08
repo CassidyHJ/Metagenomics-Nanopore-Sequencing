@@ -1,0 +1,64 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: \"Removing Host Reads\"\n",
+        "editor: visual\n",
+        "jupyter: python3\n",
+        "---\n",
+        "\n",
+        "\n",
+        "Our next step is to remove or filter out human reads to prepare for downstream analysis. We use [MiniMap2](https://github.com/lh3/minimap2), a fast and flexible alignment tool, to map reads against a human reference genome. This produces a BAM file, which contains all aligned sequences. The resulting BAM file can then be sorted using Samtools.\n",
+        "\n",
+        "To remove human reads, we use reference genome: GCF_000001405.26_GRCh38_genomic.fna.gz. If other host organisms need to be filtered (e.g., horses, sheep, or cattle), you should first remove human reads as human contamination can be introduced during wet lab handling and then map against additional host references as needed.\n",
+        "\n",
+        "Reference genomes for other species (eg., horses, sheep or cattle) are available under the path: /mnt/viro0002-data/workgroups_projects/Bioinformatics/DB/\n",
+        "\n",
+        "``` bash\n",
+        "minimap2 -Y -t 32 -x map-ont -a /mnt/viro0002-data/workgroups_projects/Bioinformatics/DB/HG38/GCF_000001405.26_GRCh38_genomic.fna.gz all_reads_QC.fastq 2> /dev/null | samtools view -bf 4 - | samtools sort - > all_reads_nonhuman.bam\n",
+        "samtools fastq all_reads_nonhuman.bam > all_reads_QC_hg19.fastq\n",
+        "```\n",
+        "\n",
+        "🔹<strong style=\"color:darkblue\">-Y</strong> – Use soft clipping for supplementary alignments. This keeps partial alignments from being \"hard clipped\" — helps retain info from partially mapped reads.\\\n",
+        "🔹<strong style=\"color:darkblue\">-t 32</strong> – Use 32 threads to speed up the alignment.\\\n",
+        "🔹<strong style=\"color:darkblue\">-x map-ont</strong> – Use preset parameters for Oxford Nanopore reads (optimized scoring and alignment behavior).\\\n",
+        "🔹<strong style=\"color:darkblue\">-a</strong> – Output SAM format (sequence alignment/map). Required for downstream tools like samtools.\\\n",
+        "🔹<strong style=\"color:darkblue\">GRCh38_genomic.fna.gz</strong> – Path to the human genome reference (can be gzipped). You're aligning reads to this genome.\\\n",
+        "🔹<strong style=\"color:darkblue\">all_reads_QC.fastq</strong> – The input FASTQ file (your cleaned and quality-filtered reads).\\\n",
+        "🔹<strong style=\"color:darkblue\">/dev/null</strong> – Silences stderr output (errors, warnings, and logs) so the console isn’t cluttered.\\\n",
+        "🔹<strong style=\"color:darkblue\">-b</strong> – Output as BAM (compressed binary format for alignments).\\\n",
+        "🔹<strong style=\"color:darkblue\">-f 4</strong> – Keep only unmapped reads (reads that did not align to the reference genome).\n",
+        "\n",
+        "To reduce the volume of unnecessary files (and save space), please remove the resulting bam file created. We are not interested in this bam file as it represents all the aligned sequences for the human genome.\n",
+        "\n",
+        "``` bash\n",
+        "rm all_reads_nonhuman.bam\n",
+        "```\n",
+        "\n",
+        "::: callout-important\n",
+        "## Important\n",
+        "\n",
+        "You now have your cleaned and trimmed reads **\"all_reads_QC_hg19.fastq\"**. We will be using these reads for all further analysis!\n",
+        ":::\n",
+        "\n",
+        "Now we need to screen the sample, either through taxonomic classification or *de novo* assembly. While mapping refers to mapping reads to a reference, assembly focuses on the reconstruction of the original sequence by aligning and merging shorter reads.\n",
+        "\n",
+        "![Illustration](Mapping_diff.jpg)"
+      ],
+      "id": "2a2db383"
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "python3",
+      "language": "python",
+      "display_name": "Python 3 (ipykernel)",
+      "path": "C:\\Users\\Hayley Cassidy\\AppData\\Local\\Programs\\Python\\Python313\\share\\jupyter\\kernels\\python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}

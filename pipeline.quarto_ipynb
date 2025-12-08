@@ -1,0 +1,62 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: \"Pipeline Stages\"\n",
+        "jupyter: python3\n",
+        "---\n",
+        "\n",
+        "\n",
+        "# Taxonomic Classification\n",
+        "\n",
+        "\n",
+        "```{bash}\n",
+        "kraken2 --db kraken_db --report report.txt --output kraken_output.txt non_host.fastq\n",
+        "```\n",
+        "\n",
+        "\n",
+        "## Visualization\n",
+        "\n",
+        "\n",
+        "```{bash}\n",
+        "ktImportTaxonomy -o krona_report.html report.txt\n",
+        "```\n",
+        "\n",
+        "\n",
+        "## Metagenomics Automation\n",
+        "\n",
+        "\n",
+        "```{bash}\n",
+        "snakemake --cores 4\n",
+        "```\n",
+        "\n",
+        "\n",
+        "# Generating a Consensus Sequence\n",
+        "\n",
+        "Use minimap2 and samtools for alignment and variant calling.\n",
+        "\n",
+        "## Consensus Visualization\n",
+        "\n",
+        "Visual inspection using IGV or bam-readcount.\n",
+        "\n",
+        "## Phylodynamics\n",
+        "\n",
+        "Run tree inference with tools like IQ-TREE or TreeTime, then visualize with Auspice or iTOL."
+      ],
+      "id": "c69cb2e7"
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "python3",
+      "language": "python",
+      "display_name": "Python 3 (ipykernel)",
+      "path": "C:\\Users\\Hayley Cassidy\\AppData\\Local\\Programs\\Python\\Python313\\share\\jupyter\\kernels\\python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}

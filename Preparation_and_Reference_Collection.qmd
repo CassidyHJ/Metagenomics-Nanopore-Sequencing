@@ -1,0 +1,52 @@
+---
+title: "Preparation and Reference Collection"
+editor: visual
+jupyter: python3
+---
+
+Create an additional folder for all your tree analysis:
+
+``` bash
+cd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Viro_Run_0001/barcode01/
+mkdir Tree
+```
+
+**Make sure you are in the right path**
+
+``` bash
+cd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Viro_Run_0001/barcode01/Tree/
+```
+
+::: callout-warning
+## Warning
+
+Remember to update the run paths and barcodes for each sample!
+:::
+
+## Collecting your reference sequences
+
+Using a curated database (eg [BV-BRC](https://www.bv-brc.org/view/Virus/10239), [GISAID](https://gisaid.org/), [Refseq](https://www.ncbi.nlm.nih.gov/refseq/)) download your reference fasta files - please name the file "*pathogen*_sequences" and place in the "Tree" folder.
+
+To open your fasta file, [bioedit](https://bioedit.software.informer.com/) or [Aliview](https://github.com/AliView/AliView) can be used. Rename the references to remove any spaces or unsupported characters (use underscores instead). For consistency, it's best to include the accession number, species name, genotype (if available), country of origin and sampling year. Metadata will be important for generating a time-resolved tree with [Nextstrain](https://docs.nextstrain.org/en/latest/index.html) (more on this later) or can be used in clinical reporting.
+
+Open an excel sheet. This will be your metadata file. This should include the reference name in the first column referred to as "strain", followed by any other available metadata you have for this reference. Save the metadata file as **metadata.tsv** and place it in the "Tree" folder.
+
+Please refer to this [link](https://docs.nextstrain.org/projects/augur/en/stable/faq/metadata.html) for more information on metadata set up. Be carful of the date format on excel!
+
+**For the purpose of this guide, we will use rhinovirus A as a study virus.** Below you can see an example of the metadata layout.
+
+![Metadata layout](meta.jpg)
+
+::: callout-important
+## Important
+
+**Now add your selected consensus sequences of interest to the fasta file "*pathogen*_sequences"and metadata file.**
+:::
+
+::: callout-warning
+## Warning
+
+The strain name on the metadata.tsv should match exactly with the corresponding fasta file!
+:::
+
+------------------------------------------------------------------------

@@ -1,0 +1,77 @@
+---
+title: "Visualization"
+editor: visual
+jupyter: python3
+---
+
+## Generating Krona plots
+
+[KronaTools](https://github.com/marbl/Krona) can be used to generate Krona plots which represent hierarchical data in multi-layered pie charts.
+
+Make sure you are in the right folder.
+
+``` bash
+cd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Viro_Run_0001/barcode01/kraken2_standard/ 
+```
+
+::: callout-warning
+## Warning
+
+Remember to update the run paths and barcodes for each sample!
+:::
+
+Copy the command below:
+
+``` bash
+ktImportTaxonomy -t 5 -m 3 -o report.html report_standard.txt
+```
+
+🔹<strong style="color:darkblue">-t 5</strong> – Sets the total number of taxonomic levels (or depth) to display.\
+🔹<strong style="color:darkblue">-m 3</strong> – Minimum number of reads required for a taxon to appear in the output to reduce clutter.\
+🔹<strong style="color:darkblue">-o krona_report.html</strong> – Output file name for the interactive HTML Krona chart.\
+🔹<strong style="color:darkblue">report.txt</strong> – Input file containing taxonomic classification data (e.g., from Kraken2's output).
+
+::: callout-tip
+## Tip
+
+If there are any false positive hits you want to exclude from the Krona plot, you must manually remove them from the **report_standard.txt** file before running the Krona command. If its inconclusive, you can keep the potential false positive result in the krona plot, but remember to state that a false positive finding is likely in the clinical report. 
+:::
+
+![Illustration example](krona.jpg)
+
+Please click [here](BC03.html) for an example of the interactive HTML krona output. Select only for viruses. If you want to copy the image, right hand click and copy. This image can then be pasted (with some adjustments) on the clinical reports.
+
+### False postive findings 
+
+After viewing the krona plot, you may want to remove some false positive findings. 
+
+You can do this by going into the **Kraken2_standard** folder and opening up the **report_standard.txt** file. There you can set the number of reads back to zero for the false positive finding - remember in addition to setting the number of reads, you must also set the normalized percentage. Save with the same name. 
+
+::: callout-warning
+## Warning
+
+Remember to be in the correct folder
+:::
+
+``` bash
+cd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Viro_Run_0001/barcode01/Kraken2_standard/
+```
+
+Remove the original krona plot 
+
+``` bash
+rm report.html
+```
+
+Then just re-run the command: 
+
+``` bash
+ktImportTaxonomy -t 5 -m 3 -o report.html report_standard.txt
+```
+
+In order to open your krona plot (and other files) within windows, you need to have permission. Paste the following into the terminal:
+
+``` bash
+chmod 777 -R /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Viro_Run_0001/
+```
+This will take some time! 

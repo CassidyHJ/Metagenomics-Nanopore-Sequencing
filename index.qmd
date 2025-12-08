@@ -1,0 +1,11 @@
+---
+title: "Nanopore Metagenomics analysis manual"
+---
+
+# Introduction
+
+Welcome to the Nanopore metagenomics sequencing manual! This manual provides a step by step guide for performing quality control, removing host reads, taxonomic classification, *de novo* assembly and consensus generation following sequencing using the GridION or PromethION. 
+
+We also have an automated pipeline for part of the metagenomics workflow, culminating in krona plots for taxonomic classification. Of course, being metagenomics, you don't always know what you are looking for so consensus generation is quite ad hoc. Nevertheless, this manual will also help you generate consensus sequences step by step, along with some visualization and phylodynamics using the Nextstrain pipeline. 
+
+Use the navigation bar to explore each section. Please start with the Preparation chapter regardless of following the manual or automation pipeline. 

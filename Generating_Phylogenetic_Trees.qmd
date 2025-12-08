@@ -1,0 +1,69 @@
+---
+title: "Generating Phylogenetic Trees"
+editor: visual
+jupyter: python3
+---
+
+A phylogenetic tree or phylogeny shows the evolutionary history between a set of species or taxa during a specific time. It can be used to indicate similarities between sequences or help identify clusters or lineages.
+
+There are several different tools to help you build trees.
+
+We will first build a more simplified tree using [MAFFT](https://github.com/GSLBiotech/mafft) (for alignment) and [IQ-TREE](https://github.com/iqtree/iqtree3) (estimates Maximum-Likelihood Phylogeny). We will then use [Figtree](https://github.com/rambaut/figtree) for visualization.
+
+Make sure you have read through and completed any tasks in the **Preparation and Reference collection** chapter.
+
+**Now make sure you are in the right path**
+
+``` bash
+cd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Viro_Run_0001/barcode01/Tree/
+```
+
+## Sequence alignment using MAFFT
+
+We will continue with our RVA example. We first need to align all our sequences.
+
+``` bash
+mafft -s RVA_sequences.fasta > sequences_aligned.fasta
+```
+
+🔹<strong style="color:darkblue">-s RVA_sequences.fasta</strong> – Specifies the input sequences in FASTA format. This is your “pathogen_of_interest_sequences” (in this case, Rotavirus A sequences).
+
+::: callout-warning
+## Warning
+
+Its important to always check your new alignment file to see if there are any sequences causing problems (e.g adding extra gaps) and remove them. Then re-run the alignment again.
+:::
+
+![Example 1 - In this case, you could remove the problematic sequence if its only present in one reference](alignment_problem.jpg)
+
+![Example 2 - An example of a high-quality alignment (e.g., no gaps, high similarity, proper coverage)](alignment_better.jpg)
+
+## Generating phylogenetic trees using IQ-Tree
+
+Now that you have your alignment, copy the command below:
+
+``` bash
+iqtree -s sequences_aligned.fasta -bb 1000 -st DNA -nt 16 -alrt 1000 -pre treefileout
+```
+
+🔹<strong style="color:darkblue">-s sequences_aligned.fasta</strong> – Specifies the input alignment file in FASTA format. This should contain multiple aligned sequences (in this case, Rotavirus A sequences).
+
+🔹<strong style="color:darkblue">-bb 1000</strong> – Performs ultrafast bootstrap analysis with 1000 replicates to assess the support for each branch in the phylogenetic tree.
+
+🔹<strong style="color:darkblue">-st DNA</strong> – Indicates that the input sequences are DNA (nucleotide) sequences.
+
+🔹<strong style="color:darkblue">-nt 16</strong> – Uses 16 CPU threads for computation, speeding up the tree-building process.
+
+🔹<strong style="color:darkblue">-alrt 1000</strong> – Runs an approximate likelihood-ratio test (aLRT) with 1000 replicates to calculate additional support values for tree branches.
+
+🔹<strong style="color:darkblue">-pre treefileout</strong> – Defines the prefix for all output files, such as treefileout.treefile
+
+## Visualization using Figtree
+
+[FigTree](https://github.com/rambaut/figtree) is a free and open sourced tree visualization tool. Although its not always suitable for large datasets and is primarily designed for rooted trees, its a quick tool to visualize your initial trees.
+
+Start up Figtree and select open (select your new tree - **treefileout.contree**)
+
+-root in the middle, align tip labels, tip shapes, branch labels (display by bootstrap)
+
+Please see the figure below as an example: ![Simple tree](figtree.jpg)

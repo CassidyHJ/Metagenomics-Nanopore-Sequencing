@@ -1,0 +1,70 @@
+---
+title: "Assembly Automation"
+editor: visual
+jupyter: python3
+---
+
+Assembly focuses on the reconstruction of the original sequence by aligning and merging shorter reads.
+
+Mapping-based approaches are more frequently used for Nanopore sequencing data owing to the higher base-calling error rate, which renders long-read de novo assembly more challenging compared to Illumina sequencing. However, in cases of high target coverage, contigs can be successfully assembled by merging overlapping reads.
+
+[Diamond](https://github.com/bbuchfink/diamond) and [Canu](https://github.com/marbl/canu) are tools that can be used for contig generation. Using cleaned Nanopore reads as input, our automated pipeline first identifies and annotates viral reads with DIAMOND, followed by contig assembly with Canu and taxonomic classification using BLAST. The pipeline produces a meta.contig.fasta file and a top_hit_per_contig.tsv summary table as final outputs.
+
+Please note that the DIAMOND database used in this workflow is curated for viruses associated with humans and is therefore less suitable for broad or unbiased virus discovery.
+
+## Preparing to run the workflow
+
+To run the automated pipeline, you first need to fill out the excel sheet **Assembly_paths.xlsx** within the **Assembly_automation** folder as shown in the example below. Do not change the file name when saving! Here, you tell snakemake which folder your cleaned reads are in. 
+![Example](assembly_auto_excel.png)
+
+You need to be in the right environment:
+
+``` bash
+conda deactivate nanopore_diagnostics
+```
+
+``` bash
+conda activate canu_v2.3
+```
+
+Make sure you are in the right folder.
+
+``` bash
+cd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Metagenomics_automation/Assembly_automation/  
+```
+
+Then just copy in the following command:
+
+``` bash
+snakemake --cores 16 
+```
+
+::: callout-warning
+## Warning
+
+This analysis may take some time. Its best to run all the samples together and run overnight.
+:::
+
+::: callout-warning
+## Warning
+
+Remember to update the run paths and barcodes for each sample!
+:::
+
+
+## Output summaries
+
+Once the analysis is complete, open the newly created **Assembly_results** folder within the **Metagenomics_automation** directory. The two key output files you will need — **top_hit_per_contig.tsv** and **meta.contig.fasta** — are located in the canu subfolder.
+
+This file contains your top blast hits for each of your generated contigs. 
+![Example for File 1: top_hit_per_contig.tsv](assembly_auto_output3.png)
+The contig names should match the best hits. You can also double check the sequences by blasting on NCBI. These are your generated contigs!
+![Example for File 2: meta.contig.fasta](assembly_auto_output4.png)
+
+::: callout-tip
+## Tip
+
+If there are no assembly files created, this could mean that no contigs could be generated.
+:::
+
+------------------------------------------------------------------------

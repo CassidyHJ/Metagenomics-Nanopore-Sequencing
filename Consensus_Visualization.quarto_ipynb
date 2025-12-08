@@ -1,0 +1,53 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: \"Consensus Visualization\"\n",
+        "editor: visual\n",
+        "jupyter: python3\n",
+        "---\n",
+        "\n",
+        "\n",
+        "## Creating coverage plots\n",
+        "\n",
+        "[weeSAM](https://github.com/centre-for-virus-research/weeSAM) can be used for generating coverage plots and providing statistics based on the bam file.\n",
+        "\n",
+        "Make sure you are in the right path\n",
+        "\n",
+        "``` bash\n",
+        "cd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Viro_Run_0001/barcode01/\n",
+        "```\n",
+        "\n",
+        "::: callout-warning\n",
+        "## Warning\n",
+        "\n",
+        "Remember to update the run paths and barcodes for each sample!\n",
+        ":::\n",
+        "\n",
+        "Now just copy the command below:\n",
+        "\n",
+        "``` bash\n",
+        "weeSAM --bam all_reads.bam --html coverage_plot\n",
+        "```\n",
+        "\n",
+        "![Example](coverage.jpg)\n",
+        "\n",
+        "In the newly created folder **\"coverage_plot_html_results\"**, click on \"figures\" then \"all_reads_figures\" until you find the html report."
+      ],
+      "id": "3c980574"
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "python3",
+      "language": "python",
+      "display_name": "Python 3 (ipykernel)",
+      "path": "C:\\Users\\Hayley Cassidy\\AppData\\Local\\Programs\\Python\\Python313\\share\\jupyter\\kernels\\python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}

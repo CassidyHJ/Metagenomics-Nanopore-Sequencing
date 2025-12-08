@@ -1,0 +1,15 @@
+{
+  "hash": "8372dca10386e07d24fbae8af3e60214",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Metagenomics Nanopore Workflow\"\nformat: html\neditor: visual\nauthor: \"Hayley Cassidy\"\ndate: \"14-07-2025\"\ntoc: true\ntoc-location: left\nnumber-sections: true\n\n\n\n\n---\n\n\n\nThis is a Quarto website.\n\nTo learn more about Quarto websites visit <https://quarto.org/docs/websites>.\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\n1 + 1\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n[1] 2\n```\n\n\n:::\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
