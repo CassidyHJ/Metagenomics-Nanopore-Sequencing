@@ -14,8 +14,7 @@ Please note that the DIAMOND database used in this workflow is curated for virus
 
 ## Preparing to run the workflow
 
-To run the automated pipeline, you first need to fill out the excel sheet **Assembly_paths.xlsx** within the **Assembly_automation** folder as shown in the example below. Do not change the file name when saving! Here, you tell snakemake which folder your cleaned reads are in. 
-![Example](assembly_auto_excel.png)
+To run the automated pipeline, you first need to fill out the excel sheet **Assembly_paths.xlsx** within the **Assembly_automation** folder as shown in the example below. Do not change the file name when saving! Here, you tell snakemake which folder your cleaned reads are in. ![Example](updated_assembly_file_path.png)
 
 You need to be in the right environment:
 
@@ -51,15 +50,11 @@ This analysis may take some time. Its best to run all the samples together and r
 Remember to update the run paths and barcodes for each sample!
 :::
 
-
 ## Output summaries
 
 Once the analysis is complete, open the newly created **Assembly_results** folder within the **Metagenomics_automation** directory. The two key output files you will need — **top_hit_per_contig.tsv** and **meta.contig.fasta** — are located in the canu subfolder.
 
-This file contains your top blast hits for each of your generated contigs. 
-![Example for File 1: top_hit_per_contig.tsv](assembly_auto_output3.png)
-The contig names should match the best hits. You can also double check the sequences by blasting on NCBI. These are your generated contigs!
-![Example for File 2: meta.contig.fasta](assembly_auto_output4.png)
+This file contains your top blast hits for each of your generated contigs. ![Example for File 1: top_hit_per_contig.tsv](assembly_auto_output3.png) The contig names should match the best hits. You can also double check the sequences by blasting on NCBI. These are your generated contigs! ![Example for File 2: meta.contig.fasta](assembly_auto_output4.png)
 
 ::: callout-tip
 ## Tip
