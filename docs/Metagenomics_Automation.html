@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Hayley Cassidy">
-<meta name="dcterms.date" content="2025-12-08">
+<meta name="dcterms.date" content="2025-12-18">
 
 <title>Metagenomics Automation – Metagenomics Nanopore Workflow</title>
 <style>
@@ -304,7 +304,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">December 8, 2025</p>
+      <p class="date">December 18, 2025</p>
     </div>
   </div>
   
@@ -336,7 +336,7 @@ Warning
 <p>To run the automated pipeline, you need to fill out the excel sheet <strong>file_paths.xlsx</strong> within the <strong>Metagenomics_automation</strong> folder exactly as shown in the example below. Do not change the file name when saving! Here, you tell snakemake where to find your data.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="excel_fill.jpg" class="img-fluid figure-img"></p>
+<p><img src="updated_file_paths.png" class="img-fluid figure-img"></p>
 <figcaption>Example</figcaption>
 </figure>
 </div>
@@ -371,7 +371,7 @@ Tip
 <p>If its all green, everything is working. Just let it run in the background</p>
 </div>
 </div>
-<p>Once the run is finished, please see the figure below to find your data.</p>
+<p>Once the run is finished, please see the figure below to find your data. After selecting the “results” folder, please find your run number (which should contain all your barcodes).</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="snakemake.jpg" class="img-fluid figure-img"></p>
@@ -388,13 +388,10 @@ Warning
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Rename the <strong>results</strong> folder with the run name (for example Viro_Run_0001).<br>
-This step is critical—if another Snakemake run is started without renaming, the previous output will be overwritten.</p>
+<p>Your run may stop prematurely, this can be for a variety of reasons, just try running the following command (it will ignore previously made files):</p>
 </div>
 </div>
-<p>To rename, please use this example</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Metagenomics_automation/</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> results Viro_Run_0001</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">snakemake</span> <span class="at">--cores</span> 16 <span class="at">--rerun-incomplete</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <section id="false-postive-findings" class="level3" data-number="1.1">
 <h3 data-number="1.1" class="anchored" data-anchor-id="false-postive-findings"><span class="header-section-number">1.1</span> False postive findings</h3>
 <p>After viewing the krona plot within the <strong>krona</strong> folder, you may want to remove some false positive findings.</p>

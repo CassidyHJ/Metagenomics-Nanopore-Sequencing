@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Hayley Cassidy">
-<meta name="dcterms.date" content="2025-12-08">
+<meta name="dcterms.date" content="2025-12-18">
 
 <title>Assembly Automation – Metagenomics Nanopore Workflow</title>
 <style>
@@ -302,7 +302,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">December 8, 2025</p>
+      <p class="date">December 18, 2025</p>
     </div>
   </div>
   
@@ -320,7 +320,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Please note that the DIAMOND database used in this workflow is curated for viruses associated with humans and is therefore less suitable for broad or unbiased virus discovery.</p>
 <section id="preparing-to-run-the-workflow" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="preparing-to-run-the-workflow"><span class="header-section-number">1</span> Preparing to run the workflow</h2>
-<p>To run the automated pipeline, you first need to fill out the excel sheet <strong>Assembly_paths.xlsx</strong> within the <strong>Assembly_automation</strong> folder as shown in the example below. Do not change the file name when saving! Here, you tell snakemake which folder your cleaned reads are in. <img src="assembly_auto_excel.png" class="img-fluid" alt="Example"></p>
+<p>To run the automated pipeline, you first need to fill out the excel sheet <strong>Assembly_paths.xlsx</strong> within the <strong>Assembly_automation</strong> folder as shown in the example below. Do not change the file name when saving! Here, you tell snakemake which folder your cleaned reads are in. <img src="updated_assembly_file_path.png" class="img-fluid" alt="Example"></p>
 <p>You need to be in the right environment:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate nanopore_diagnostics</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate canu_v2.3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
