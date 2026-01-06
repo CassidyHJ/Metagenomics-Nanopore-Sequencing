@@ -16,7 +16,7 @@ We can make use of a tool called [Snakemake](https://snakemake.readthedocs.io/en
 
 ## Preparing to run the workflow
 
-To run the automated pipeline, you need to fill out the excel sheet **file_paths.xlsx** within the **Metagenomics_automation** folder exactly as shown in the example below. Do not change the file name when saving! Here, you tell snakemake where to find your data.
+To run the automated pipeline, you need to fill out the excel sheet **file_paths.xlsx** within the **Metagenomics_automation** folder exactly as shown in the example below. Do not change the file name when saving! Here, you tell Snakemake where to find your data.
 
 ![Example](updated_file_paths.png)
 
@@ -48,12 +48,12 @@ If its all green, everything is working. Just let it run in the background
 
 Once the run is finished, please see the figure below to find your data. After selecting the "results" folder, please find your run number (which should contain all your barcodes). 
 
-![Example](snakemake.jpg)
+![Example](snakemake2.jpg)
 
 ::: callout-warning
 ## Warning
 
-Your run may stop prematurely, this can be for a variety of reasons, just try running the following command (it will ignore previously made files):
+Your run may stop prematurely, this can be for a variety of reasons. Just try running the following command (it will ignore previously made files):
 :::
 
 ``` bash
@@ -62,18 +62,18 @@ snakemake --cores 16 --rerun-incomplete
 
 ### False postive findings
 
-After viewing the krona plot within the **krona** folder, you may want to remove some false positive findings.
+After viewing the krona plot within the "krona" folder, you may want to remove some false positive findings.
 
-You can do this by going into the **classification** folder and opening up the **report_standard.txt** file. There you can set the number of reads back to zero for the false positive finding - remember in addition to setting the number of reads, you must also set the normalized percentage. Save with the same name.
+You can do this by going into the "classification" folder within the appropriate barcode and opening up the **report_standard.txt** file. There you can set the number of reads back to zero for the false positive finding - remember to also re-set the normalized percentage. Save the file with the same name.
 
 ::: callout-warning
 ## Warning
 
-Remember to be in the correct folder
+For the next steps, remember to be in the correct folder and update the paths. 
 :::
 
 ``` bash
-cd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Metagenomics_automation/Viro_Run_0001/barcode01/krona/
+cd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Metagenomics_automation/Viro_Run_001/barcode01/krona/
 ```
 
 Remove the original krona plot
@@ -91,7 +91,7 @@ snakemake --cores 16
 In order to access your krona plot (and other files) within windows, you will need permission. Paste the following into the terminal:
 
 ``` bash
-chmod 777 -R /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Viro_Run_0001/
+chmod 777 -R /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Viro_Run_001/
 ```
 
 This will take some
