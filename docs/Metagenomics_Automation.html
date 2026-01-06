@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Hayley Cassidy">
-<meta name="dcterms.date" content="2025-12-18">
+<meta name="dcterms.date" content="2026-01-06">
 
 <title>Metagenomics Automation – Metagenomics Nanopore Workflow</title>
 <style>
@@ -304,7 +304,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">December 18, 2025</p>
+      <p class="date">January 6, 2026</p>
     </div>
   </div>
   
@@ -333,7 +333,7 @@ Warning
 <p>We can make use of a tool called <a href="https://snakemake.readthedocs.io/en/stable/">Snakemake</a> to automate the previous steps into a single pipeline. With Snakemake, you can define the steps of your analysis in a Snakefile and then let Snakemake handle the execution, dependency management and error handling.</p>
 <section id="preparing-to-run-the-workflow" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="preparing-to-run-the-workflow"><span class="header-section-number">1</span> Preparing to run the workflow</h2>
-<p>To run the automated pipeline, you need to fill out the excel sheet <strong>file_paths.xlsx</strong> within the <strong>Metagenomics_automation</strong> folder exactly as shown in the example below. Do not change the file name when saving! Here, you tell snakemake where to find your data.</p>
+<p>To run the automated pipeline, you need to fill out the excel sheet <strong>file_paths.xlsx</strong> within the <strong>Metagenomics_automation</strong> folder exactly as shown in the example below. Do not change the file name when saving! Here, you tell Snakemake where to find your data.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="updated_file_paths.png" class="img-fluid figure-img"></p>
@@ -374,7 +374,7 @@ Tip
 <p>Once the run is finished, please see the figure below to find your data. After selecting the “results” folder, please find your run number (which should contain all your barcodes).</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="snakemake.jpg" class="img-fluid figure-img"></p>
+<p><img src="snakemake2.jpg" class="img-fluid figure-img"></p>
 <figcaption>Example</figcaption>
 </figure>
 </div>
@@ -388,14 +388,14 @@ Warning
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Your run may stop prematurely, this can be for a variety of reasons, just try running the following command (it will ignore previously made files):</p>
+<p>Your run may stop prematurely, this can be for a variety of reasons. Just try running the following command (it will ignore previously made files):</p>
 </div>
 </div>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">snakemake</span> <span class="at">--cores</span> 16 <span class="at">--rerun-incomplete</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <section id="false-postive-findings" class="level3" data-number="1.1">
 <h3 data-number="1.1" class="anchored" data-anchor-id="false-postive-findings"><span class="header-section-number">1.1</span> False postive findings</h3>
-<p>After viewing the krona plot within the <strong>krona</strong> folder, you may want to remove some false positive findings.</p>
-<p>You can do this by going into the <strong>classification</strong> folder and opening up the <strong>report_standard.txt</strong> file. There you can set the number of reads back to zero for the false positive finding - remember in addition to setting the number of reads, you must also set the normalized percentage. Save with the same name.</p>
+<p>After viewing the krona plot within the “krona” folder, you may want to remove some false positive findings.</p>
+<p>You can do this by going into the “classification” folder within the appropriate barcode and opening up the <strong>report_standard.txt</strong> file. There you can set the number of reads back to zero for the false positive finding - remember to also re-set the normalized percentage. Save the file with the same name.</p>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -406,16 +406,16 @@ Warning
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Remember to be in the correct folder</p>
+<p>For the next steps, remember to be in the correct folder and update the paths.</p>
 </div>
 </div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Metagenomics_automation/Viro_Run_0001/barcode01/krona/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Metagenomics_automation/Viro_Run_001/barcode01/krona/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Remove the original krona plot</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> report.html</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Then just re-run snakemake (it will ignore previously made files and just focus on generating your updated krona plot)</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">snakemake</span> <span class="at">--cores</span> 16</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>In order to access your krona plot (and other files) within windows, you will need permission. Paste the following into the terminal:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> 777 <span class="at">-R</span> /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Viro_Run_0001/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> 777 <span class="at">-R</span> /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Viro_Run_001/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This will take some</p>
 
 
