@@ -39,11 +39,18 @@ conda activate nextstrain2025
 
 ### Download the references
 
-You first need to go to the Nextstrain github page for your virus of interest. We will use [mpox](https://github.com/nextstrain/mpox/tree/master?tab=readme-ov-file)as an example.
+You first need to go to the Nextstrain github page for your virus of interest. We will use  [mpox](https://github.com/nextstrain/mpox/tree/master?tab=readme-ov-file) as an example.
 
 ![Example](github.jpg) Click **Code** and then **Download ZIP**. This zip contains all your scripts you need for the pipeline.
 
 Now extract and save your zipped file (in this case **mpox-master**) in our newly created folder **Nextstrain_builds**.
+
+::: callout-warning
+## Warning
+
+Some pipelines may require certain dependencies, you may need to check requirements on the github page of your target of interest. Our environment **nextstrain2025** should include most of the tools you require. 
+:::
+
 
 You now need to download all the curated reference sequences (these sequences are continually updated as new sequences become available). As the scripts contained in **mpox-master** assume you are within the ingest directory, please copy the following command:
 
@@ -51,18 +58,12 @@ You now need to download all the curated reference sequences (these sequences ar
 cd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/ingest/
 ```
 
-Now you can "fetch" all the curated reference sequences:
-
-``` bash
-nextstrain build . data/ncbi.ndjson
-```
-
 ## Ingest pipeline
 
-Next you will run the "ingest" pipeline. The ingest pipeline in Nextstrain takes raw sequence data (e.g., from NCBI) and filters, standardizes and outputs cleaned fasta and metadata files named "sequences.fasta" and "metadata.tsv". These are your input files for the next pipeline.
+Next you will run the "ingest" pipeline. The ingest pipeline in Nextstrain "fetches" all the curated reference sequences and then filters, standardizes and outputs cleaned fasta and metadata files named "sequences.fasta" and "metadata.tsv". These are your input files for the next pipeline. The "ambient" flag allows the command to run outside of any container image or managed environment.
 
 ``` bash
-nextstrain build .
+nextstrain build --ambient .
 ```
 
 ::: callout-important
@@ -80,11 +81,11 @@ ls
 
 (i) First add your individual **fasta** sequence(s) of interest to the "/mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/ingest/results/" folder. The sequence name and file name should match. To check the sequence name, open with bioedit, Aliview or notepad.
 
-(ii) You next need to combine your downloaded reference fasta (named **sequences.fasta**) with your sequence(s) of interest (in this case we will use **sample.fasta**)
+(ii) You next need to combine your downloaded reference fasta file from the ingest step (named **sequences.fasta**) with your sequence(s) of interest (this should be called **our_samples.fasta**). All your sequence(s) of interest should be in this file.  
 
 ``` bash
 cd /mnt/viro000-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/ingest/results/
-cat Sample.fasta >> sequences.fasta
+cat our_samples.fasta >> sequences.fasta
 ```
 
 ::: callout-tip
@@ -93,11 +94,11 @@ cat Sample.fasta >> sequences.fasta
 Remember **cat** just means concatenate.
 :::
 
-(iii) You also need to combine your downloaded reference metadata (**metadata.tsv**) with the metadata of your virus of interest
+(iii) You also need to combine your downloaded reference metadata file from the ingest step (**metadata.tsv**) with the metadata of your sequence(s) of interest. 
 
-The following image offers an example of the metadata layout. In the columns highlighted, please provide data.
+The following image offers an example of the metadata layout. In the columns highlighted, please provide data. You should find this example file named **new_metadata.excel** in the Nextstrain builds folder. 
 
-![Example files](excel_for_nextstrain_pre_set.png)
+![Example files](excel_for_nextstrain_pre_set2.png)
 
 ::: callout-warning
 ## Warning
@@ -123,39 +124,72 @@ tail -n +2 new_metadata.tsv >> metadata.tsv
 
 Below you can see an example of the files:
 
-![Example files](path_files_ingest.jpg)
+![Example files](paths_for_ingest_2.jpg)
 
-### Manually add your updated files for the next script
+### Forcing sequence inclusion
 
-Next you need to copy your updated files (sequence.fasta and metadata.tsv) into another folder (**phylogenetic**) for the next script:
+The pipeline works by pruning sequences of low quality or subsampling if many sequences are run at the same time. You can force the pipeline to include your sequences of interest. This option is integrated within the snakemake. A file can be found within the default folder of the specific (clade) build you will generate. In our case we will focus on all clades.     
+
+Please go to this location:
 
 ``` bash
-cp /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/ingest/results/sequences.fasta /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/phylogenetic/data/
-cp /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/ingest/results/metadata.tsv /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/phylogenetic/data/
+cd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/phylogenetic/defaults/mpox/
+ls
 ```
 
+Just add all the **strain** names from your sequence(s) of interest to the **include.txt** file (one sequence name per line) and save. 
+
+
+### Additional contig file
+
+Some workflows on Nextstrain require an additional config file to update parameters or point towards a particular folder. The following config file can be used for all Nextstrain builds. Copy over **my-inputs.yaml** from the Nextstrain_builds folder into the phylogenetic folder (in this case we are using mpox-master). 
+
+``` bash
+cp /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/my-inputs.yaml /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/phylogenetic/
+```
 ### Phylogenetic pipeline
 
-Once you have coped over the files, make sure you are in the right folder:
+Make sure you are in the right folder:
 
 ``` bash
 cd /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/phylogenetic/
 ```
 
-Now just run the following command. The phylogenetic pipeline uses the cleaned fasta and metadata from ingest, aligns sequences, builds and refines a phylogenetic tree, annotates it with traits or mutations, and outputs an Auspice JSON ready for interactive visualization.
+Now just run the following command. The phylogenetic pipeline uses the cleaned fasta and metadata from ingest, aligns sequences, builds and refines a phylogenetic tree, annotates it with traits or mutations, and outputs an Auspice JSON ready for interactive visualization. The config file used is for all mpox strains, please see the tip box below for alternative clades.
 
 ``` bash
-nextstrain build .
+nextstrain build --ambient . --configfiles defaults/mpxv/config.yaml my-inputs.yaml
 ```
+
+::: callout-tip
+## Tip
+Run pipeline to produce the "overview" tree for /mpox/all-clades with:
+nextstrain build . --configfile defaults/mpxv/config.yaml
+
+Run pipeline to produce the "clade IIb" tree for /mpox/clade-IIb with:
+nextstrain build . --configfile defaults/hmpxv1/config.yaml
+
+Run pipeline to produce the "lineage B.1" tree for /mpox/lineage-B.1 with:
+nextstrain build . --configfile defaults/hmpxv1_big/config.yaml
+
+Run pipeline to produce the "clade I" tree for /mpox/clade-I with:
+nextstrain build . --configfile defaults/clade-i/config.yaml
+:::
+
+::: callout-important
+## Important
+
+You may run out of memory, just re-run again.
+:::
 
 Just let the script run.
 
 ### Visualization
 
-Once the script has finished, please run the following command. This will open your phylodynamic tree on a web browser for visualization.
+Once the script has finished, please run the following command. This will open your phylodynamic tree on a web browser for visualization. Any problems, just drag and drop the **mpox_all-clades.json** file (within the **auspice** folder) onto this [link](https://auspice.us/). Auspice allows an interactive exploration of phylogenomic datasets by simply dragging & dropping.  
 
 ``` bash
-nextstrain view .
+nextstrain view --ambient .
 ```
 
 Use the filter to find your sequences (zoom into the tree by clicking branches). Play around with the different metadata fields (e.g. country, genotype etc.), tree layouts and branch lengths (time and divergence).

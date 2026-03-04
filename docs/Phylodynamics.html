@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Hayley Cassidy">
-<meta name="dcterms.date" content="2025-12-18">
+<meta name="dcterms.date" content="2026-03-04">
 
 <title>Generating Phylodynamic Trees – Metagenomics Nanopore Workflow</title>
 <style>
@@ -277,9 +277,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#ingest-pipeline" id="toc-ingest-pipeline" class="nav-link" data-scroll-target="#ingest-pipeline"><span class="header-section-number">2</span> Ingest pipeline</a>
   <ul class="collapse">
   <li><a href="#now-its-time-to-add-your-sequences-and-metadata" id="toc-now-its-time-to-add-your-sequences-and-metadata" class="nav-link" data-scroll-target="#now-its-time-to-add-your-sequences-and-metadata"><span class="header-section-number">2.1</span> Now its time to add your sequences and metadata</a></li>
-  <li><a href="#manually-add-your-updated-files-for-the-next-script" id="toc-manually-add-your-updated-files-for-the-next-script" class="nav-link" data-scroll-target="#manually-add-your-updated-files-for-the-next-script"><span class="header-section-number">2.2</span> Manually add your updated files for the next script</a></li>
-  <li><a href="#phylogenetic-pipeline" id="toc-phylogenetic-pipeline" class="nav-link" data-scroll-target="#phylogenetic-pipeline"><span class="header-section-number">2.3</span> Phylogenetic pipeline</a></li>
-  <li><a href="#visualization" id="toc-visualization" class="nav-link" data-scroll-target="#visualization"><span class="header-section-number">2.4</span> Visualization</a></li>
+  <li><a href="#forcing-sequence-inclusion" id="toc-forcing-sequence-inclusion" class="nav-link" data-scroll-target="#forcing-sequence-inclusion"><span class="header-section-number">2.2</span> Forcing sequence inclusion</a></li>
+  <li><a href="#additional-contig-file" id="toc-additional-contig-file" class="nav-link" data-scroll-target="#additional-contig-file"><span class="header-section-number">2.3</span> Additional contig file</a></li>
+  <li><a href="#phylogenetic-pipeline" id="toc-phylogenetic-pipeline" class="nav-link" data-scroll-target="#phylogenetic-pipeline"><span class="header-section-number">2.4</span> Phylogenetic pipeline</a></li>
+  <li><a href="#visualization" id="toc-visualization" class="nav-link" data-scroll-target="#visualization"><span class="header-section-number">2.5</span> Visualization</a></li>
   </ul></li>
   <li><a href="#nextstrain---creating-your-own-pipeline" id="toc-nextstrain---creating-your-own-pipeline" class="nav-link" data-scroll-target="#nextstrain---creating-your-own-pipeline"><span class="header-section-number">3</span> Nextstrain - creating your own pipeline</a>
   <ul class="collapse">
@@ -323,7 +324,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">December 18, 2025</p>
+      <p class="date">March 4, 2026</p>
     </div>
   </div>
   
@@ -362,19 +363,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate nextstrain2025</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <section id="download-the-references" class="level3" data-number="1.1">
 <h3 data-number="1.1" class="anchored" data-anchor-id="download-the-references"><span class="header-section-number">1.1</span> Download the references</h3>
-<p>You first need to go to the Nextstrain github page for your virus of interest. We will use <a href="https://github.com/nextstrain/mpox/tree/master?tab=readme-ov-file">mpox</a>as an example.</p>
+<p>You first need to go to the Nextstrain github page for your virus of interest. We will use <a href="https://github.com/nextstrain/mpox/tree/master?tab=readme-ov-file">mpox</a> as an example.</p>
 <p><img src="github.jpg" class="img-fluid" alt="Example"> Click <strong>Code</strong> and then <strong>Download ZIP</strong>. This zip contains all your scripts you need for the pipeline.</p>
 <p>Now extract and save your zipped file (in this case <strong>mpox-master</strong>) in our newly created folder <strong>Nextstrain_builds</strong>.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Some pipelines may require certain dependencies, you may need to check requirements on the github page of your target of interest. Our environment <strong>nextstrain2025</strong> should include most of the tools you require.</p>
+</div>
+</div>
 <p>You now need to download all the curated reference sequences (these sequences are continually updated as new sequences become available). As the scripts contained in <strong>mpox-master</strong> assume you are within the ingest directory, please copy the following command:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/ingest/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Now you can “fetch” all the curated reference sequences:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextstrain</span> build . data/ncbi.ndjson</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 </section>
 <section id="ingest-pipeline" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="ingest-pipeline"><span class="header-section-number">2</span> Ingest pipeline</h2>
-<p>Next you will run the “ingest” pipeline. The ingest pipeline in Nextstrain takes raw sequence data (e.g., from NCBI) and filters, standardizes and outputs cleaned fasta and metadata files named “sequences.fasta” and “metadata.tsv”. These are your input files for the next pipeline.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextstrain</span> build .</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Next you will run the “ingest” pipeline. The ingest pipeline in Nextstrain “fetches” all the curated reference sequences and then filters, standardizes and outputs cleaned fasta and metadata files named “sequences.fasta” and “metadata.tsv”. These are your input files for the next pipeline. The “ambient” flag allows the command to run outside of any container image or managed environment.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextstrain</span> build <span class="at">--ambient</span> .</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -388,16 +400,16 @@ Important
 <p>Check these two files have been created.</p>
 </div>
 </div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/ingest/results/</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/ingest/results/</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <section id="now-its-time-to-add-your-sequences-and-metadata" class="level3" data-number="2.1">
 <h3 data-number="2.1" class="anchored" data-anchor-id="now-its-time-to-add-your-sequences-and-metadata"><span class="header-section-number">2.1</span> Now its time to add your sequences and metadata</h3>
 <ol type="i">
 <li><p>First add your individual <strong>fasta</strong> sequence(s) of interest to the “/mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/ingest/results/” folder. The sequence name and file name should match. To check the sequence name, open with bioedit, Aliview or notepad.</p></li>
-<li><p>You next need to combine your downloaded reference fasta (named <strong>sequences.fasta</strong>) with your sequence(s) of interest (in this case we will use <strong>sample.fasta</strong>)</p></li>
+<li><p>You next need to combine your downloaded reference fasta file from the ingest step (named <strong>sequences.fasta</strong>) with your sequence(s) of interest (this should be called <strong>our_samples.fasta</strong>). All your sequence(s) of interest should be in this file.</p></li>
 </ol>
-<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /mnt/viro000-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/ingest/results/</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> Sample.fasta <span class="op">&gt;&gt;</span> sequences.fasta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /mnt/viro000-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/ingest/results/</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> our_samples.fasta <span class="op">&gt;&gt;</span> sequences.fasta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -412,12 +424,12 @@ Tip
 </div>
 </div>
 <ol start="3" type="i">
-<li>You also need to combine your downloaded reference metadata (<strong>metadata.tsv</strong>) with the metadata of your virus of interest</li>
+<li>You also need to combine your downloaded reference metadata file from the ingest step (<strong>metadata.tsv</strong>) with the metadata of your sequence(s) of interest.</li>
 </ol>
-<p>The following image offers an example of the metadata layout. In the columns highlighted, please provide data.</p>
+<p>The following image offers an example of the metadata layout. In the columns highlighted, please provide data. You should find this example file named <strong>new_metadata.excel</strong> in the Nextstrain builds folder.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="excel_for_nextstrain_pre_set.png" class="img-fluid figure-img"></p>
+<p><img src="excel_for_nextstrain_pre_set2.png" class="img-fluid figure-img"></p>
 <figcaption>Example files</figcaption>
 </figure>
 </div>
@@ -449,34 +461,70 @@ Tip
 </div>
 <p>Save the excel sheet as “new_metadata.txt” (tab-delimited) in the “/mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/ingest/results/” folder then change the file extension to <strong>tsv</strong>.</p>
 <p>Now run the following command to combine the metadata files:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n</span> +2 new_metadata.tsv <span class="op">&gt;&gt;</span> metadata.tsv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n</span> +2 new_metadata.tsv <span class="op">&gt;&gt;</span> metadata.tsv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>🔹<strong style="color:darkblue">–tail -n +2</strong> – skips the first line (header) of the new file.</p>
 <p>Below you can see an example of the files:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="path_files_ingest.jpg" class="img-fluid figure-img"></p>
+<p><img src="paths_for_ingest_2.jpg" class="img-fluid figure-img"></p>
 <figcaption>Example files</figcaption>
 </figure>
 </div>
 </section>
-<section id="manually-add-your-updated-files-for-the-next-script" class="level3" data-number="2.2">
-<h3 data-number="2.2" class="anchored" data-anchor-id="manually-add-your-updated-files-for-the-next-script"><span class="header-section-number">2.2</span> Manually add your updated files for the next script</h3>
-<p>Next you need to copy your updated files (sequence.fasta and metadata.tsv) into another folder (<strong>phylogenetic</strong>) for the next script:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/ingest/results/sequences.fasta /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/phylogenetic/data/</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/ingest/results/metadata.tsv /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/phylogenetic/data/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="forcing-sequence-inclusion" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="forcing-sequence-inclusion"><span class="header-section-number">2.2</span> Forcing sequence inclusion</h3>
+<p>The pipeline works by pruning sequences of low quality or subsampling if many sequences are run at the same time. You can force the pipeline to include your sequences of interest. This option is integrated within the snakemake. A file can be found within the default folder of the specific (clade) build you will generate. In our case we will focus on all clades.</p>
+<p>Please go to this location:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/phylogenetic/defaults/mpox/</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Just add all the <strong>strain</strong> names from your sequence(s) of interest to the <strong>include.txt</strong> file (one sequence name per line) and save.</p>
 </section>
-<section id="phylogenetic-pipeline" class="level3" data-number="2.3">
-<h3 data-number="2.3" class="anchored" data-anchor-id="phylogenetic-pipeline"><span class="header-section-number">2.3</span> Phylogenetic pipeline</h3>
-<p>Once you have coped over the files, make sure you are in the right folder:</p>
+<section id="additional-contig-file" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="additional-contig-file"><span class="header-section-number">2.3</span> Additional contig file</h3>
+<p>Some workflows on Nextstrain require an additional config file to update parameters or point towards a particular folder. The following config file can be used for all Nextstrain builds. Copy over <strong>my-inputs.yaml</strong> from the Nextstrain_builds folder into the phylogenetic folder (in this case we are using mpox-master).</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/my-inputs.yaml /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/phylogenetic/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="phylogenetic-pipeline" class="level3" data-number="2.4">
+<h3 data-number="2.4" class="anchored" data-anchor-id="phylogenetic-pipeline"><span class="header-section-number">2.4</span> Phylogenetic pipeline</h3>
+<p>Make sure you are in the right folder:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /mnt/viro0002-data/sequencedata/processed/Diagnostics_metagenomics/Nextstrain_builds/mpox-master/phylogenetic/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Now just run the following command. The phylogenetic pipeline uses the cleaned fasta and metadata from ingest, aligns sequences, builds and refines a phylogenetic tree, annotates it with traits or mutations, and outputs an Auspice JSON ready for interactive visualization.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextstrain</span> build .</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Now just run the following command. The phylogenetic pipeline uses the cleaned fasta and metadata from ingest, aligns sequences, builds and refines a phylogenetic tree, annotates it with traits or mutations, and outputs an Auspice JSON ready for interactive visualization. The config file used is for all mpox strains, please see the tip box below for alternative clades.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextstrain</span> build <span class="at">--ambient</span> . <span class="at">--configfiles</span> defaults/mpxv/config.yaml my-inputs.yaml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Run pipeline to produce the “overview” tree for /mpox/all-clades with: nextstrain build . –configfile defaults/mpxv/config.yaml</p>
+<p>Run pipeline to produce the “clade IIb” tree for /mpox/clade-IIb with: nextstrain build . –configfile defaults/hmpxv1/config.yaml</p>
+<p>Run pipeline to produce the “lineage B.1” tree for /mpox/lineage-B.1 with: nextstrain build . –configfile defaults/hmpxv1_big/config.yaml</p>
+<p>Run pipeline to produce the “clade I” tree for /mpox/clade-I with: nextstrain build . –configfile defaults/clade-i/config.yaml</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You may run out of memory, just re-run again.</p>
+</div>
+</div>
 <p>Just let the script run.</p>
 </section>
-<section id="visualization" class="level3" data-number="2.4">
-<h3 data-number="2.4" class="anchored" data-anchor-id="visualization"><span class="header-section-number">2.4</span> Visualization</h3>
-<p>Once the script has finished, please run the following command. This will open your phylodynamic tree on a web browser for visualization.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextstrain</span> view .</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="visualization" class="level3" data-number="2.5">
+<h3 data-number="2.5" class="anchored" data-anchor-id="visualization"><span class="header-section-number">2.5</span> Visualization</h3>
+<p>Once the script has finished, please run the following command. This will open your phylodynamic tree on a web browser for visualization. Any problems, just drag and drop the <strong>mpox_all-clades.json</strong> file (within the <strong>auspice</strong> folder) onto this <a href="https://auspice.us/">link</a>. Auspice allows an interactive exploration of phylogenomic datasets by simply dragging &amp; dropping.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextstrain</span> view <span class="at">--ambient</span> .</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Use the filter to find your sequences (zoom into the tree by clicking branches). Play around with the different metadata fields (e.g.&nbsp;country, genotype etc.), tree layouts and branch lengths (time and divergence).</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
